@@ -16,7 +16,7 @@ class MoveableObject {
     loadImages(arr) {
         arr.forEach((path) => {
         let img = new Image();
-        img.src =path;
+        img.src = path;
         this.imageCache[path] = img;
         });
     }

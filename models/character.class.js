@@ -2,7 +2,12 @@ class Character extends MoveableObject {
   height = 250;
   width = 100;
   y = 180;
-  speed = 10;
+  baseSpeed = 7;
+  maxSpeed = 15;
+  speed = this.baseSpeed;
+  speedIncrement = 0.15;
+  walkDuration = 0;
+  lastDirection = null;
   IMAGES_WALKING_PEPE = [
     "assets/img/2_character_pepe/2_walk/W-21.png",
     "assets/img/2_character_pepe/2_walk/W-22.png",
@@ -22,22 +27,38 @@ class Character extends MoveableObject {
 
   animate() {
     setInterval(() => {
-      if (this.world && this.world.keyboard.RIGHT) {
-        this.otherDirection = false
+      let currentDirection = null;
+
+      if (this.world && this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+        currentDirection = 'RIGHT';
+        this.otherDirection = false;
         this.x += this.speed;
-      }
-      if (this.world && this.world.keyboard.LEFT) {
+      } 
+      
+      if (this.world && this.world.keyboard.LEFT && this.x > 100) {
+        currentDirection = 'LEFT';
         this.otherDirection = true;
         this.x -= this.speed;
       }
-      this.world.camera_x = -this.x;
+
+      this.world.camera_x = -this.x + 100;
+
+      if (currentDirection === this.lastDirection && currentDirection !== null) {
+        this.walkDuration += 1000 / 60;
+      } else {
+        this.walkDuration = 0;
+        this.speed = this.baseSpeed;
+      }
+
+      if(this.walkDuration >= 2000) {
+        this.speed = Math.min(this.speed + this.speedIncrement, this.maxSpeed);
+      }
+
+      this.lastDirection = currentDirection;
     }, 1000 / 60);
 
     setInterval(() => {
-      if (
-        this.world &&
-        (this.world.keyboard.RIGHT || this.world.keyboard.LEFT)
-      ) {
+      if (this.world && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT)) {
         let i = this.currentImagePepe % this.IMAGES_WALKING_PEPE.length;
         this.img = this.imageCache[this.IMAGES_WALKING_PEPE[i]];
         this.currentImagePepe++;
