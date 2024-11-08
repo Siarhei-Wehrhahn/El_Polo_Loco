@@ -40,7 +40,8 @@ class Character extends MoveableObject {
     "assets/img/2_character_pepe/1_idle/idle/I-10.png",
   ];
   world;
-  walking_sound = new Audio("../assets/audio/running.mp3");
+  walking_sound = new Audio('../assets/audio/running.mp3');
+  jump_sound = new Audio('assets/audio/jump.mp3')
   currentImage = 0;
 
   constructor() {
@@ -74,7 +75,8 @@ class Character extends MoveableObject {
       }
 
       if(this.world && this.world.keyboard.UP && !this.isAboveGround()) {
-        this.jump()
+        this.jump();
+        this.jump_sound.play();
       }
 
       this.world.camera_x = -this.x + 100;
