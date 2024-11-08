@@ -8,7 +8,7 @@ class Character extends MoveableObject {
   speedIncrement = 0.15;
   walkDuration = 0;
   lastDirection = null;
-  IMAGES_WALKING_PEPE = [
+  IMAGES_WALKING = [
     "assets/img/2_character_pepe/2_walk/W-21.png",
     "assets/img/2_character_pepe/2_walk/W-22.png",
     "assets/img/2_character_pepe/2_walk/W-23.png",
@@ -18,11 +18,11 @@ class Character extends MoveableObject {
   ];
   world;
   walking_sound = new Audio('../assets/audio/running.mp3');
-  currentImagePepe = 0;
+  currentImage = 0;
 
   constructor() {
     super().loadImage("assets/img/2_character_pepe/2_walk/W-21.png");
-    this.loadImages(this.IMAGES_WALKING_PEPE);
+    this.loadImages(this.IMAGES_WALKING);
     this.animate();
   }
 
@@ -62,9 +62,7 @@ class Character extends MoveableObject {
 
     setInterval(() => {
       if (this.world && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT)) {
-        let i = this.currentImagePepe % this.IMAGES_WALKING_PEPE.length;
-        this.img = this.imageCache[this.IMAGES_WALKING_PEPE[i]];
-        this.currentImagePepe++;
+        this.playAnimation(this.IMAGES_WALKING);
       }
     }, 50);
   }

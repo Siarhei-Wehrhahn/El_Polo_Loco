@@ -33,7 +33,7 @@ class Level {
       createMoreChicken() {
         setInterval(() => {
             if(world.character.x < this.level_end_x) {
-                const spawnDistance = 610 + Math.random() * 100;
+                const spawnDistance = 1000 + Math.random() * 100;
                 const chickenPosition = world.character.x + spawnDistance;
 
                 const newChicken = [
