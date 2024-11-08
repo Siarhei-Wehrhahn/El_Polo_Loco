@@ -9,35 +9,35 @@ class Character extends MoveableObject {
   walkDuration = 0;
   lastDirection = null;
   IMAGES_WALKING = [
-    "assets/img/2_character_pepe/2_walk/W-21.png",
-    "assets/img/2_character_pepe/2_walk/W-22.png",
-    "assets/img/2_character_pepe/2_walk/W-23.png",
-    "assets/img/2_character_pepe/2_walk/W-24.png",
-    "assets/img/2_character_pepe/2_walk/W-25.png",
-    "assets/img/2_character_pepe/2_walk/W-26.png",
+    'assets/img/2_character_pepe/2_walk/W-21.png',
+    'assets/img/2_character_pepe/2_walk/W-22.png',
+    'assets/img/2_character_pepe/2_walk/W-23.png',
+    'assets/img/2_character_pepe/2_walk/W-24.png',
+    'assets/img/2_character_pepe/2_walk/W-25.png',
+    'assets/img/2_character_pepe/2_walk/W-26.png',
   ];
   IMAGES_JUMP = [
-    "assets/img/2_character_pepe/3_jump/J-31.png",
-    "assets/img/2_character_pepe/3_jump/J-32.png",
-    "assets/img/2_character_pepe/3_jump/J-33.png",
-    "assets/img/2_character_pepe/3_jump/J-34.png",
-    "assets/img/2_character_pepe/3_jump/J-35.png",
-    "assets/img/2_character_pepe/3_jump/J-36.png",
-    "assets/img/2_character_pepe/3_jump/J-37.png",
-    "assets/img/2_character_pepe/3_jump/J-38.png",
-    "assets/img/2_character_pepe/3_jump/J-39.png",
+    'assets/img/2_character_pepe/3_jump/J-31.png',
+    'assets/img/2_character_pepe/3_jump/J-32.png',
+    'assets/img/2_character_pepe/3_jump/J-33.png',
+    'assets/img/2_character_pepe/3_jump/J-34.png',
+    'assets/img/2_character_pepe/3_jump/J-35.png',
+    'assets/img/2_character_pepe/3_jump/J-36.png',
+    'assets/img/2_character_pepe/3_jump/J-37.png',
+    'assets/img/2_character_pepe/3_jump/J-38.png',
+    'assets/img/2_character_pepe/3_jump/J-39.png',
   ];
   IMAGES_STAND = [
-    "assets/img/2_character_pepe/1_idle/idle/I-1.png",
-    "assets/img/2_character_pepe/1_idle/idle/I-2.png",
-    "assets/img/2_character_pepe/1_idle/idle/I-3.png",
-    "assets/img/2_character_pepe/1_idle/idle/I-4.png",
-    "assets/img/2_character_pepe/1_idle/idle/I-5.png",
-    "assets/img/2_character_pepe/1_idle/idle/I-6.png",
-    "assets/img/2_character_pepe/1_idle/idle/I-7.png",
-    "assets/img/2_character_pepe/1_idle/idle/I-8.png",
-    "assets/img/2_character_pepe/1_idle/idle/I-9.png",
-    "assets/img/2_character_pepe/1_idle/idle/I-10.png",
+    'assets/img/2_character_pepe/1_idle/idle/I-1.png',
+    'assets/img/2_character_pepe/1_idle/idle/I-2.png',
+    'assets/img/2_character_pepe/1_idle/idle/I-3.png',
+    'assets/img/2_character_pepe/1_idle/idle/I-4.png',
+    'assets/img/2_character_pepe/1_idle/idle/I-5.png',
+    'assets/img/2_character_pepe/1_idle/idle/I-6.png',
+    'assets/img/2_character_pepe/1_idle/idle/I-7.png',
+    'assets/img/2_character_pepe/1_idle/idle/I-8.png',
+    'assets/img/2_character_pepe/1_idle/idle/I-9.png',
+    'assets/img/2_character_pepe/1_idle/idle/I-10.png',
   ];
   world;
   walking_sound = new Audio('../assets/audio/running.mp3');
@@ -45,7 +45,7 @@ class Character extends MoveableObject {
   currentImage = 0;
 
   constructor() {
-    super().loadImage("assets/img/2_character_pepe/2_walk/W-21.png");
+    super().loadImage('assets/img/2_character_pepe/2_walk/W-21.png');
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMP);
     this.animate();
@@ -61,14 +61,14 @@ class Character extends MoveableObject {
         this.world.keyboard.RIGHT &&
         this.x < this.world.level.level_end_x
       ) {
-        currentDirection = "RIGHT";
+        currentDirection = 'RIGHT';
         this.otherDirection = false;
         this.moveRight();
         this.isAboveGround() ? this.walking_sound.pause() : this.walking_sound.play();
       }
 
       if (this.world && this.world.keyboard.LEFT && this.x > 108) {
-        currentDirection = "LEFT";
+        currentDirection = 'LEFT';
         this.otherDirection = true;
         this.moveLeft();
         this.isAboveGround() ? this.walking_sound.pause() : this.walking_sound.play();
