@@ -2,6 +2,7 @@ class Level {
     enemies;
     clouds;
     backgroundObjects;
+    coins = [];
     level_end_x = 14400000000;
 
     constructor(enemies, clouds, backgroundObjects) {
@@ -10,6 +11,22 @@ class Level {
         this.backgroundObjects = backgroundObjects;
         this.createMoreChicken();
     }
+
+    spawnCoins() {
+      const repetitions = 50;
+      let y = -200;
+      for (let i = 0; i < repetitions; i++) {
+        y += 1000;
+        let x = 110 + Math.random() * 150;
+          this.coins.push(
+            new Coin(x, y),
+            new Coin(x, y + 35),
+            new Coin(x, y + 70),
+            new Coin(x, y + 105),
+            new Coin(x, y + 140),
+          );
+      }
+}
 
     createBackgroundObjectsLevel1() {
         const backgroundLayers = [
@@ -42,6 +59,8 @@ class Level {
 
                 this.enemies.push(...newChicken)
             }
-        }, 1000 * 3)
+        }, 1000 * 10)
       }
+
+      
 }

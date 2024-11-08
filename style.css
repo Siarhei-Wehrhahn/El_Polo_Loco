@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'GloriaHallelujah';
+    src: url('assets/fonts/GloriaHallelujah-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 canvas {
     background-color: black;
     border: 4px solid #e85d04;
@@ -8,8 +15,20 @@ canvas {
 
 h1 {
     font-size: 80px;
-    margin-top: 200px;
+    margin-top: 70px;
+    font-family: 'GloriaHallelujah', sans-serif;
+    color: #e63946;
+    text-shadow: 4px 4px #457b9d, -2px -2px #f4a261;
+    border: 4px solid #f4a261;
+    border-radius: 15px;
+    padding: 20px;
+    background-color: #ffdd55;
+    box-shadow: 8px 8px 0 #457b9d, -4px -4px 0 #f4a261;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    display: inline-block;
 }
+
 
 body {
     display: flex;
@@ -21,8 +40,6 @@ body {
     background-size: cover;
     height: 100vh;
     margin: 0;
-    display: flex;
     justify-content: start;
-    align-items: center;
-    gap: 70px;
+    gap: 50px;
 }
