@@ -42,13 +42,8 @@ class World {
     if (mo.otherDirection) {
       this.flipImage(mo);
     }
-    try {
-      mo.draw(this.ctx);
-      mo.drawFrame(this.ctx);
-    } catch (error) {
-      console.warn('Error loading img', error);
-      console.log('Could not load image ', mo.img);
-    }
+    mo.draw(this.ctx);
+    mo.drawFrame(this.ctx);
     if (mo.otherDirection) {
       this.flipImageBack(mo);
     }
