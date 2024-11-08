@@ -49,12 +49,11 @@ class MoveableObject {
     }
   }
 
+  moveRight() {
+    this.x += this.speed;
+  }
+
   moveLeft() {
-    setInterval(() => {
-      if (this.x <= -10) {
-        this.x = Character.x + 400;
-      }
-      this.x -= this.speed;
-    }, 1000 / 60);
+    this.x -= this.speed;
   }
 }

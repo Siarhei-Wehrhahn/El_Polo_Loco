@@ -63,18 +63,18 @@ class Character extends MoveableObject {
       ) {
         currentDirection = "RIGHT";
         this.otherDirection = false;
-        this.x += this.speed;
-        this.walking_sound.play();
+        this.moveRight();
+        this.isAboveGround() ? this.walking_sound.pause() : this.walking_sound.play();
       }
 
       if (this.world && this.world.keyboard.LEFT && this.x > 108) {
         currentDirection = "LEFT";
         this.otherDirection = true;
-        this.x -= this.speed;
-        this.walking_sound.play();
+        this.moveLeft();
+        this.isAboveGround() ? this.walking_sound.pause() : this.walking_sound.play();
       }
 
-      if(this.world && this.world.keyboard.UP && !this.isAboveGround()) {
+      if(this.world && (this.world.keyboard.UP || this.world.keyboard.SPACE) && !this.isAboveGround()) {
         this.jump();
         this.jump_sound.play();
       }
