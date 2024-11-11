@@ -1,15 +1,10 @@
-class MoveableObject {
-  x = 120;
-  y = 270;
-  height = 170;
-  width = 100;
-  img;
-  imageCache = {};
+class MoveableObject extends DrawableObject {
   speed = 0.15;
   otherDirection = false;
-  currentImage;
   speedY;
   acceleration = 3;
+  energy = 100;
+  lastHit = 0;
 
   applyGravity() {
     setInterval(() => {
@@ -28,29 +23,12 @@ class MoveableObject {
     this.speedY = 30;
   }
 
-  loadImage(path) {
-    this.img = new Image();
-    this.img.src = path;
-  }
-
-  loadImages(arr) {
-    arr.forEach((path) => {
-      let img = new Image();
-      img.src = path;
-      this.imageCache[path] = img;
-    });
-  }
-
   playAnimation(images) {
     if (images.length > 0) {
       let i = this.currentImage % images.length;
       this.img = this.imageCache[images[i]];
       this.currentImage++;
     }
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 
   drawFrame(ctx) {
@@ -62,14 +40,31 @@ class MoveableObject {
       ctx.stroke();
     }
   }
+
+  isColliding (mo) {
+    return  this.x + this.width > mo.x &&
+    this.y + this.height > mo.y &&
+    this.x < mo.x &&
+    this.y < mo.y + mo.height;
+}
   
+  hit() {
+    this.energy -= 5;
+    if(this.energy < 0) {
+      this.energy = 0;
+    } else {
+      this.lastHit = new Date().getTime();
+    }
+  }
 
-  isColliding (obj) {
-    return  (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) && 
-            (this.y + this.offsetY + this.height) >= obj.y &&
-            (this.y + this.offsetY) <= (obj.y + obj.height) && 
-            obj.onCollisionCourse; // Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
+  isHurt() {
+    let timePassed = new Date().getTime() - this.lastHit;
+    timePassed = timePassed / 1000;
+    return timePassed < 1;
+  }
 
+  isDead() {
+    return this.energy == 0;
 }
 
   moveRight() {

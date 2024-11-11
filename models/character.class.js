@@ -39,6 +39,20 @@ class Character extends MoveableObject {
     'assets/img/2_character_pepe/1_idle/idle/I-9.png',
     'assets/img/2_character_pepe/1_idle/idle/I-10.png',
   ];
+  IMAGES_HURT = [
+    'assets/img/2_character_pepe/4_hurt/H-41.png',
+    'assets/img/2_character_pepe/4_hurt/H-42.png',
+    'assets/img/2_character_pepe/4_hurt/H-43.png',
+  ];
+  IMAGES_DEAD = [
+    'assets/img/2_character_pepe/5_dead/D-51.png',
+    'assets/img/2_character_pepe/5_dead/D-52.png',
+    'assets/img/2_character_pepe/5_dead/D-53.png',
+    'assets/img/2_character_pepe/5_dead/D-54.png',
+    'assets/img/2_character_pepe/5_dead/D-55.png',
+    'assets/img/2_character_pepe/5_dead/D-56.png',
+    'assets/img/2_character_pepe/5_dead/D-57.png'
+  ]
   world;
   walking_sound = new Audio('../assets/audio/running.mp3');
   jump_sound = new Audio('assets/audio/jump.mp3')
@@ -47,7 +61,9 @@ class Character extends MoveableObject {
   constructor() {
     super().loadImage('assets/img/2_character_pepe/2_walk/W-21.png');
     this.loadImages(this.IMAGES_WALKING);
+    this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_JUMP);
+    this.loadImages(this.IMAGES_HURT);
     this.animate();
     this.applyGravity();
   }
@@ -99,7 +115,11 @@ class Character extends MoveableObject {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.isAboveGround()) {
+      if(this.isDead()) {
+        this.playAnimation(this.IMAGES_DEAD);
+      } else if(this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT);
+      } else if (this.isAboveGround()) {
         this.playAnimation(this.IMAGES_JUMP);
       } else {
         if (

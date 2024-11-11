@@ -8,7 +8,7 @@ class World {
   camera_x = 0;
 
   constructor(canvas, keyboard) {
-    this.ctx = canvas.getContext('2d');
+    this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.setWorld();
@@ -18,13 +18,12 @@ class World {
 
   checkCollisions() {
     setInterval(() => {
-      this.level.enemies.forEach(enemy => {
-        if(this.character.isColliding(enemy)) {
-          console.log("Kolisionmit enemy", enemy);
-          
+      this.level.enemies.forEach((enemy) => {
+        if (this.character.isColliding(enemy)) {
+          this.character.hit();
         }
       });
-    }, 200)
+    }, 1000);
   }
 
   setWorld() {
@@ -45,7 +44,7 @@ class World {
   }
 
   addObjectToMap(objects) {
-    objects.forEach(o => {
+    objects.forEach((o) => {
       this.addToMap(o);
     });
   }
