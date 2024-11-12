@@ -19,14 +19,10 @@ class ThrowableObject extends MoveableObject {
   }
 
   throw() {
-    this.playAnimation(this.IMAGES_THROW);
+  // this.playAnimation(this.IMAGES_THROW);
     this.speedY = 30;
     this.throwInterval = setInterval(() => {
       this.x += 10;
     }, 1000 / 60);
-  }
-
-  checkHit(){
-    World.checkColi
   }
 }
