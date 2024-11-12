@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,16 +17,19 @@
     <script src="./models/endboss.class.js"></script>
     <script src="./models/coins.class.js"></script>
     <script src="./models/level.class.js"></script>
+    <script src="./models/throwable-object.class.js"></script>
     <script src="./Levels/level1.js"></script>
     <script src="./script/game.js"></script>
     <title>Document</title>
 </head>
+
 <body onload="init() ">
-    
+
     <h1>El pollo loco</h1>
 
     <canvas width="1050" height="480" id="canvas"></canvas>
 
+    <img src="assets/img/image.png" alt="fullScreenIcon" id="fullScreenIcon">
     <div class="control">
         <div class="box">
             <img style="margin-right: 14px;" src="assets/img/control/space.png" alt="">
@@ -42,5 +46,19 @@
             <p>= RIGHT</p>
         </div>
     </div>
+    <script>
+        document.getElementById('fullScreenIcon').addEventListener('click', () => {
+            if (canvas.requestFullscreen) {
+                canvas.requestFullscreen();
+            } else if (canvas.mozRequestFullScreen) { // Firefox
+                canvas.mozRequestFullScreen();
+            } else if (canvas.webkitRequestFullscreen) { // Chrome, Safari und Opera
+                canvas.webkitRequestFullscreen();
+            } else if (canvas.msRequestFullscreen) { // IE/Edge
+                canvas.msRequestFullscreen();
+            }
+        })
+    </script>
 </body>
+
 </html>

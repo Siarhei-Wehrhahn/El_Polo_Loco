@@ -37,7 +37,7 @@ class Level {
         ];
     
         const repetitions = 50;
-        const layerWidth = 1439;
+        const layerWidth = 1440;
         for (let i = 0; i < repetitions; i++) {
           backgroundLayers.forEach((layer) => {
             this.backgroundObjects.push(

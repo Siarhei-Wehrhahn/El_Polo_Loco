@@ -3,12 +3,12 @@ let world;
 let keyboard = new Keyboard();
 
 function init() {
-  canvas = document.getElementById('canvas');
+  canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
 }
 
-window.addEventListener('keydown', (e) => {
-  switch(e.keyCode){
+window.addEventListener("keydown", (e) => {
+  switch (e.keyCode) {
     case 38:
       keyboard.UP = true;
       break;
@@ -24,6 +24,9 @@ window.addEventListener('keydown', (e) => {
     case 32:
       keyboard.SPACE = true;
       break;
+    case 68:
+      keyboard.D = true;
+      break;
     default:
       keyboard.DOWN = false;
       keyboard.LEFT = false;
@@ -33,8 +36,8 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
-window.addEventListener('keyup', (e) => {
-  switch(e.keyCode){
+window.addEventListener("keyup", (e) => {
+  switch (e.keyCode) {
     case 38:
       keyboard.UP = false;
       break;
@@ -49,6 +52,9 @@ window.addEventListener('keyup', (e) => {
       break;
     case 32:
       keyboard.SPACE = false;
+      break;
+    case 68:
+      keyboard.D = false;
       break;
     default:
       keyboard.DOWN = false;
