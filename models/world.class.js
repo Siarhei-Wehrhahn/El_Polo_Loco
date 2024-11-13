@@ -10,6 +10,7 @@ class World {
   bottlebar = new StatusBar(20, 80, 220, 50, "bottles", 0);
   throwableObject = [];
   canThrowBottle = true;
+  bottleCount = 5;
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -25,15 +26,20 @@ class World {
       this.checkCollisions();
       this.checkThrowObjects();
       this.checkCoinCollisions();
+      this.checkBottleCollisions();
     }, 1000 / 60);
   }
 
   checkThrowObjects() {
-    if (this.keyboard.D && this.canThrowBottle) {
-      let bottle = new ThrowableObject(this.character.x + 70, this.character.y + 100, this.character.bottles);
+    if (this.keyboard.D && this.canThrowBottle && this.bottleCount > 0) {
+      this.bottleCount--;
+      let bottle = new ThrowableObject(
+        this.character.x + 70,
+        this.character.y + 100,
+        this.character.bottles
+      );
       this.throwableObject.push(bottle);
       this.canThrowBottle = false;
-      
       setTimeout(() => {
         this.canThrowBottle = true;
       }, 1000);
@@ -41,23 +47,33 @@ class World {
   }
 
   checkCollisions() {
-    this.level.enemies.forEach(enemy => {
+    this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy)) {
         this.character.hit();
         this.statusbar.setPercentage(this.character.energy);
       }
-    })
+    });
   }
 
   checkCoinCollisions() {
     this.level.coins.forEach((coin, index) => {
-        if (this.character.isColliding(coin)) {
-            this.character.coins += 1;
-            this.coinbar.setPercentage(Math.min(this.character.coins * 2, 100));
-            this.level.coins.splice(index, 1);
-        }
+      if (this.character.isColliding(coin)) {
+        this.character.coins += 1;
+        this.coinbar.setPercentage(Math.min(this.character.coins * 2, 100));
+        this.level.coins.splice(index, 1);
+      }
     });
-}
+  }
+
+  checkBottleCollisions() {
+    this.level.bottles.forEach((bottle, index) => {
+      if (this.character.isColliding(bottle)) {
+        this.bottleCount++
+        this.bottlebar.setPercentage(Math.min(this.bottleCount * 5, 100));
+        this.level.bottles.splice(index, 1);
+      }
+    });
+  }
 
   setWorld() {
     this.character.world = this;
@@ -76,6 +92,7 @@ class World {
     this.addToMap(this.bottlebar);
     this.ctx.translate(this.camera_x, 0);
     this.addObjectToMap(this.level.coins);
+    this.addObjectToMap(this.level.bottles);
     this.addObjectToMap(this.throwableObject);
     this.ctx.translate(-this.camera_x, 0);
 
