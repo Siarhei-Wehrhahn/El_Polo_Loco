@@ -20,7 +20,7 @@ class Level {
       this.bottles.push(
         new CollectableBottle(x)
       );
-      x += Math.random() * 1000;
+      x += Math.random() * 550;
     }
   }
 
@@ -72,6 +72,6 @@ class Level {
 
         this.enemies.push(...newChicken);
       }
-    }, 1000 * 10);
+    }, 1000 * 5);
   }
 }

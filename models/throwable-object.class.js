@@ -27,7 +27,6 @@ class ThrowableObject extends MoveableObject {
     this.width = 50;
     this.speedY = 30;
     this.throw();
-    this.checkCollisions();
   }
 
   throw() {
@@ -37,15 +36,6 @@ class ThrowableObject extends MoveableObject {
       this.playAnimation(this.IMAGES_THROW);
       this.x += 8;
     }, 1000 / 60);
-  }
-
-  checkCollisions() {
-    // this.world.level.enemies.forEach((enemie) => {
-    //   if (this.isColliding(enemie)) {
-    //     this.startSplashAnimation();
-    //     enemie.hit();
-    //   }
-    // });
   }
 
   applyGravity() {

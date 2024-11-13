@@ -27,6 +27,7 @@ class World {
       this.checkThrowObjects();
       this.checkCoinCollisions();
       this.checkBottleCollisions();
+      this.checkEnemiesCollision();
     }, 1000 / 60);
   }
 
@@ -50,8 +51,12 @@ class World {
   checkCollisions() {
     this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy)) {
-        this.character.hit();
-        this.statusbar.setPercentage(this.character.energy);
+        if (this.character.y + this.character.height <= enemy.y + 10) {
+          enemy.energy -= 50;
+        } else {
+          this.character.hit();
+          this.statusbar.setPercentage(this.character.energy);
+        }
       }
     });
   }
@@ -63,6 +68,28 @@ class World {
         this.coinbar.setPercentage(Math.min(this.character.coins * 2, 100));
         this.level.coins.splice(index, 1);
       }
+    });
+  }
+
+  checkEnemiesCollision() {
+    this.throwableObject.forEach((bottle) => {
+      if (bottle.hasHit) {
+        return;
+      }
+  
+      this.level.enemies.forEach((enemy, index) => {
+        if (enemy.isColliding(bottle)) {
+          if (enemy.energy > 0) {
+            enemy.energy -= 50;
+          } else if (!enemy.isDead) {
+            enemy.isDead = true;
+            enemy.showDeadChicken();
+            setTimeout(() => {
+              this.level.enemies.splice(index, 1);
+            }, 500);
+          }
+        }
+      });
     });
   }
 
