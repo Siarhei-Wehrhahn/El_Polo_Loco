@@ -31,10 +31,17 @@ class MoveableObject extends DrawableObject {
   playAnimation(images) {
     if (images.length > 0) {
       let i = this.currentImage % images.length;
-      this.img = this.imageCache[images[i]];
-      this.currentImage++;
+      let imgPath = images[i];
+      
+      if (this.imageCache[imgPath]) {
+        this.img = this.imageCache[imgPath];
+        this.currentImage++;
+      } else {
+        console.error(`Bild nicht gefunden im Cache: ${imgPath}`);
+      }
     }
   }
+  
 
   isColliding (mo) {
     return  this.x + this.width > mo.x &&
