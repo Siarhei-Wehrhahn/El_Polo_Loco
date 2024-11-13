@@ -33,6 +33,7 @@ class World {
   checkThrowObjects() {
     if (this.keyboard.D && this.canThrowBottle && this.bottleCount > 0) {
       this.bottleCount--;
+      this.bottlebar.setPercentage(Math.min(this.bottleCount * 5, 100));
       let bottle = new ThrowableObject(
         this.character.x + 70,
         this.character.y + 100,
@@ -68,7 +69,7 @@ class World {
   checkBottleCollisions() {
     this.level.bottles.forEach((bottle, index) => {
       if (this.character.isColliding(bottle)) {
-        this.bottleCount++
+        this.bottleCount++;
         this.bottlebar.setPercentage(Math.min(this.bottleCount * 5, 100));
         this.level.bottles.splice(index, 1);
       }
