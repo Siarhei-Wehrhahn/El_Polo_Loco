@@ -9,6 +9,7 @@ class World {
   coinbar = new StatusBar(20, 40, 220, 50, "coins", 0);
   bottlebar = new StatusBar(20, 80, 220, 50, "bottles", 0);
   throwableObject = [];
+  canThrowBottle = true;
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -28,9 +29,14 @@ class World {
   }
 
   checkThrowObjects() {
-    if(this.keyboard.D) {
+    if (this.keyboard.D && this.canThrowBottle) {
       let bottle = new ThrowableObject(this.character.x + 70, this.character.y + 100, this.character.bottles);
       this.throwableObject.push(bottle);
+      this.canThrowBottle = false;
+      
+      setTimeout(() => {
+        this.canThrowBottle = true;
+      }, 1000);
     }
   }
 
@@ -47,7 +53,7 @@ class World {
     this.level.coins.forEach((coin, index) => {
         if (this.character.isColliding(coin)) {
             this.character.coins += 1;
-            this.coinbar.setPercentage(Math.min(this.character.coins * 15, 100));
+            this.coinbar.setPercentage(Math.min(this.character.coins * 2, 100));
             this.level.coins.splice(index, 1);
         }
     });

@@ -71,11 +71,10 @@ class ThrowableObject extends MoveableObject {
     const splashInterval = setInterval(() => {
         this.playAnimation(this.IMAGES_SPLASH);
         
-        // Erhöhen Sie currentImage nur, wenn playAnimation keine Schleifenlogik hat
         if (this.currentImage >= this.IMAGES_SPLASH.length - 1) {
             clearInterval(splashInterval);
             this.currentImage = 0;
-            this.img = null;  // Setzt das Bild auf null, um das letzte Splash-Bild zu entfernen
+            this.img = null;
         } else {
             this.currentImage++;
         }

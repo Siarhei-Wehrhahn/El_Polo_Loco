@@ -57,7 +57,6 @@ class Character extends MoveableObject {
   walking_sound = new Audio("../assets/audio/running.mp3");
   jump_sound = new Audio("assets/audio/jump.mp3");
   currentImage = 0;
-  bottles;
   coins = 0;
 
   constructor() {
@@ -68,13 +67,6 @@ class Character extends MoveableObject {
     this.loadImages(this.IMAGES_HURT);
     this.animate();
     this.applyGravity();
-    this.bottles = 5;
-  }
-
-  throwBottle() {
-    this.bottles--;
-    let throwable = new ThrowableObject(this.x, this.y);
-    throwable.throw();
   }
 
   animate() {
@@ -88,10 +80,6 @@ class Character extends MoveableObject {
         this.moveRight();
         this.isAboveGround() ? this.walking_sound.pause() : this.walking_sound.play();
       }
-  
-      // if (this.world && this.world.keyboard.D) {
-      //   this.throwBottle();
-      // }
   
       if (this.world && this.world.keyboard.LEFT && this.x > 108) {
         currentDirection = "LEFT";
