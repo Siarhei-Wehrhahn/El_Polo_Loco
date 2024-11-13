@@ -48,11 +48,16 @@ class World {
     }
   }
 
+  //TODO : Chicken müssen vom sprung sterben
   checkCollisions() {
     this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy)) {
-        if (this.character.y + this.character.height <= enemy.y + 10) {
+        if (this.character.y + this.character.height <= enemy.y + 10 && this.character.speedY > 0) {
           enemy.energy -= 50;
+          if (enemy.energy <= 0) {
+            enemy.isDead = true;
+            enemy.showDeadChicken();
+          }
         } else {
           this.character.hit();
           this.statusbar.setPercentage(this.character.energy);

@@ -67,7 +67,9 @@ class Level {
 
         const newChicken = [
           new Chicken(chickenPosition),
+          new SmallChicken(chickenPosition + 40),
           new Chicken(chickenPosition + 50),
+          new SmallChicken(chickenPosition + 70),
         ];
 
         this.enemies.push(...newChicken);
