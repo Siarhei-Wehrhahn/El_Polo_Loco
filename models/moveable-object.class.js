@@ -50,14 +50,17 @@ class MoveableObject extends DrawableObject {
     this.y < mo.y + mo.height;
 }
   
-  hit() {
+hit() {
+  let timePassed = new Date().getTime() - this.lastHit;
+  if (timePassed > 1000) {
     this.energy -= 5;
-    if(this.energy < 0) {
+    if (this.energy < 0) {
       this.energy = 0;
-    } else {
-      this.lastHit = new Date().getTime();
     }
+    this.lastHit = new Date().getTime();
   }
+}
+
 
   isHurt() {
     let timePassed = new Date().getTime() - this.lastHit;
