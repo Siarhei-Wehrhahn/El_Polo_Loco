@@ -101,25 +101,26 @@ class World {
 
   checkEnemiesCollision() {
     this.throwableObject.forEach((bottle) => {
-      if (bottle.hasHit) {
-        return;
-      }
+        if (!bottle.hasHit) {
+            this.level.enemies.forEach((enemy, index) => {
+                if (enemy.isColliding(bottle)) {
+                    bottle.triggerSplash(); // Löst die Zerplatzen-Animation aus
+                    if (enemy.energy > 0) {
+                        enemy.energy -= 100;
+                    }
 
-      this.level.enemies.forEach((enemy, index) => {
-        if (enemy.isColliding(bottle)) {
-          if (enemy.energy > 0) {
-            enemy.energy -= 50;
-          } else if (!enemy.isDead) {
-            enemy.isDead = true;
-            enemy.showDeadChicken();
-            setTimeout(() => {
-              this.level.enemies.splice(index, 1);
-            }, 500);
-          }
+                    if (enemy.energy <= 0 && !enemy.isDead) {
+                        enemy.isDead = true;
+                        enemy.showDeadChicken();
+                        setTimeout(() => {
+                            this.level.enemies.splice(index, 1);
+                        }, 500);
+                    }
+                }
+            });
         }
-      });
     });
-  }
+}
 
   checkBottleCollisions() {
     this.level.bottles.forEach((bottle, index) => {
