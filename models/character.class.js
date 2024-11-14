@@ -57,7 +57,15 @@ class Character extends MoveableObject {
   walking_sound = new Audio("../assets/audio/running.mp3");
   jump_sound = new Audio("assets/audio/jump.mp3");
   currentImage = 0;
-  bottles;
+  coins = 0;
+  isJumping = false;
+  timeWithoutPushButton;
+  offset = {
+    top: 120,
+    bottom: 19,
+    left: 24,
+    right: 32
+  }
 
   constructor() {
     super().loadImage("assets/img/2_character_pepe/2_walk/W-21.png");
@@ -67,88 +75,74 @@ class Character extends MoveableObject {
     this.loadImages(this.IMAGES_HURT);
     this.animate();
     this.applyGravity();
-    this.bottles = 5;
-  }
-
-  throwBottle() {
-    this.bottles--;
-    let throwable = new ThrowableObject(this.x, this.y);
-    throwable.throw();
   }
 
   animate() {
     setInterval(() => {
       let currentDirection = null;
       this.walking_sound.pause();
-      if (
-        this.world &&
-        this.world.keyboard.RIGHT &&
-        this.x < this.world.level.level_end_x
-      ) {
+  
+      if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.UP && !this.world.keyboard.DOWN && !this.world.keyboard.D && !this.world.keyboard.SPACE) {
+        if (!this.timeWithoutPushButton) {
+          this.timeWithoutPushButton = Date.now();
+        }
+      } else {
+        this.timeWithoutPushButton = null;
+      }
+      
+  
+      if (this.world && this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         currentDirection = "RIGHT";
         this.otherDirection = false;
         this.moveRight();
-        this.isAboveGround()
-          ? this.walking_sound.pause()
-          : this.walking_sound.play();
+        this.isAboveGround() ? this.walking_sound.pause() : this.walking_sound.play();
       }
-
-      if (this.world && this.world.keyboard.D) {
-        this.throwBottle();
-      }
-
+  
       if (this.world && this.world.keyboard.LEFT && this.x > 108) {
         currentDirection = "LEFT";
         this.otherDirection = true;
         this.moveLeft();
-        this.isAboveGround()
-          ? this.walking_sound.pause()
-          : this.walking_sound.play();
+        this.isAboveGround() ? this.walking_sound.pause() : this.walking_sound.play();
       }
-
-      if (
-        this.world &&
-        (this.world.keyboard.UP || this.world.keyboard.SPACE) &&
-        !this.isAboveGround()
-      ) {
+  
+      if (this.world && (this.world.keyboard.UP || this.world.keyboard.SPACE) && !this.isAboveGround()) {
+        this.isJumping = true;
         this.jump();
         this.jump_sound.play();
+        setTimeout(() => {
+          this.isJumping = false;
+        }, 880);
       }
-
+  
       this.world.camera_x = -this.x + 100;
-
-      if (
-        currentDirection === this.lastDirection &&
-        currentDirection !== null
-      ) {
+  
+      if (currentDirection === this.lastDirection && currentDirection !== null) {
         this.walkDuration += 1000 / 60;
       } else {
         this.walkDuration = 0;
         this.speed = this.baseSpeed;
       }
-
+  
       if (this.walkDuration >= 2000) {
         this.speed = Math.min(this.speed + this.speedIncrement, this.maxSpeed);
       }
-
+  
       this.lastDirection = currentDirection;
     }, 1000 / 60);
-
+  
     setInterval(() => {
       if (this.isDead()) {
         this.playAnimation(this.IMAGES_DEAD);
-      } else if (this.isHurt()) {
+      } else if (this.isHurt() && !this.isDead()) {
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
         this.playAnimation(this.IMAGES_JUMP);
+      } else if (this.timeWithoutPushButton - Date.now() > 2000) {
+        this.playAnimation(this.IMAGES_STAND);
+      } else if (this.world && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround()) {
+        this.playAnimation(this.IMAGES_WALKING);
       } else {
-        if (
-          this.world &&
-          (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) &&
-          !this.isAboveGround()
-        ) {
-          this.playAnimation(this.IMAGES_WALKING);
-        }
+        this.loadImage(this.IMAGES_STAND[0])
       }
     }, 50);
   }

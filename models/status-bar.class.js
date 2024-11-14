@@ -1,33 +1,55 @@
 class StatusBar extends DrawableObject {
-  x = 20;
-  y = 20;
-  height = 50;
-  width = 300;
-  IMAGES = [
-    "assets/img/7_statusbars/1_statusbar/2_statusbar_health/orange/0.png",
-    "assets/img/7_statusbars/1_statusbar/2_statusbar_health/orange/20.png",
-    "assets/img/7_statusbars/1_statusbar/2_statusbar_health/orange/40.png",
-    "assets/img/7_statusbars/1_statusbar/2_statusbar_health/orange/60.png",
-    "assets/img/7_statusbars/1_statusbar/2_statusbar_health/orange/80.png",
-    "assets/img/7_statusbars/1_statusbar/2_statusbar_health/orange/100.png",
-  ];
+  x;
+  y;
+  height;
+  width;
+  IMAGES = {
+    "health":[
+      "assets/img/7_statusbars/1_statusbar/2_statusbar_health/orange/0.png",
+      "assets/img/7_statusbars/1_statusbar/2_statusbar_health/orange/20.png",
+      "assets/img/7_statusbars/1_statusbar/2_statusbar_health/orange/40.png",
+      "assets/img/7_statusbars/1_statusbar/2_statusbar_health/orange/60.png",
+      "assets/img/7_statusbars/1_statusbar/2_statusbar_health/orange/80.png",
+      "assets/img/7_statusbars/1_statusbar/2_statusbar_health/orange/100.png",
+    ],
+    "coins":[
+      'assets/img/7_statusbars/1_statusbar/1_statusbar_coin/orange/0.png',
+      'assets/img/7_statusbars/1_statusbar/1_statusbar_coin/orange/20.png',
+      'assets/img/7_statusbars/1_statusbar/1_statusbar_coin/orange/40.png',
+      'assets/img/7_statusbars/1_statusbar/1_statusbar_coin/orange/60.png',
+      'assets/img/7_statusbars/1_statusbar/1_statusbar_coin/orange/80.png',
+      'assets/img/7_statusbars/1_statusbar/1_statusbar_coin/orange/100.png',
+    ],
+    "bottles":[
+      'assets/img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/0.png',
+      'assets/img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/20.png',
+      'assets/img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/40.png',
+      'assets/img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/60.png',
+      'assets/img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/80.png',
+      'assets/img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png',
+    ]
+  } 
+  selectedBar;
 
-  percentage = 100;
+  percentage;
   selectedimage = 6;
 
-  constructor() {
+  constructor(x, y, width, height, selectedBar, percentage) {
     super();
-    this.loadImages(this.IMAGES);
-    this.height = 100;
-    this.width = 420;
-    this.x = 40;
-    this.y = 0;
-    this.setPercentage(100);
+    this.loadImages(this.IMAGES.health);
+    this.loadImages(this.IMAGES.coins);
+    this.loadImages(this.IMAGES.bottles);
+    this.height = height;
+    this.width = width;
+    this.x = x;
+    this.y = y;
+    this.selectedBar = selectedBar;
+    this.setPercentage(percentage);
   }
 
   setPercentage(percentage) {
     this.percentage = percentage;
-    let path = this.IMAGES[this.resolveImageIndex()];
+    let path = this.IMAGES[this.selectedBar][this.resolveImageIndex()];
     this.img = this.imageCache[path];
   }
 
