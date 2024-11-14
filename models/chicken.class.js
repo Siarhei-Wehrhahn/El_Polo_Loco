@@ -31,9 +31,9 @@ constructor(xPosition = 450 + Math.random() * 500) {
 
 animate() {
   this.walkInterval = setInterval(() => {
-    if (this.x <= -10) {
-      this.x = Character.x + 400;
-    }
+    // if (this.x <= -10) {
+    //   this.x = Character.x + 400;
+    // }
     this.moveLeft();
   }, 1000 / 60);
 
