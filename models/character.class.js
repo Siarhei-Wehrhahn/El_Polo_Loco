@@ -58,6 +58,12 @@ class Character extends MoveableObject {
   jump_sound = new Audio("assets/audio/jump.mp3");
   currentImage = 0;
   coins = 0;
+  offset = {
+    top: 120,
+    bottom: 19,
+    left: 24,
+    right: 32
+  }
 
   constructor() {
     super().loadImage("assets/img/2_character_pepe/2_walk/W-21.png");

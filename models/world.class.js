@@ -48,23 +48,32 @@ class World {
     }
   }
 
-  //TODO : Chicken müssen vom sprung sterben
   checkCollisions() {
     this.level.enemies.forEach((enemy) => {
+      const enemyBottom = enemy.y + enemy.height - enemy.offset.bottom;
+  
       if (this.character.isColliding(enemy)) {
-        if (this.character.y + this.character.height <= enemy.y + 10 && this.character.speedY > 0) {
-          enemy.energy -= 50;
-          if (enemy.energy <= 0) {
-            enemy.isDead = true;
-            enemy.showDeadChicken();
+        if (
+          this.character.y + this.character.height - this.character.offset.bottom <= enemyBottom &&
+          this.character.speedY < 0
+        ) {
+          if (!enemy.isDead) {
+            enemy.energy -= 50;
+            if (enemy.energy <= 0) {
+              enemy.isDead = true;
+              enemy.showDeadChicken();
+              setTimeout(() => {
+                this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1);
+              }, 2000);
+            }
           }
-        } else {
+        } else if (!enemy.isDead) {
           this.character.hit();
           this.statusbar.setPercentage(this.character.energy);
         }
       }
     });
-  }
+  }  
 
   checkCoinCollisions() {
     this.level.coins.forEach((coin, index) => {
@@ -75,6 +84,8 @@ class World {
       }
     });
   }
+
+  // TODO: in beide richtungen werfen , an den hühchen aufplatzen lassen, drauf springen , endboss, responsive machen
 
   checkEnemiesCollision() {
     this.throwableObject.forEach((bottle) => {

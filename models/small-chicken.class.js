@@ -11,6 +11,12 @@ class SmallChicken extends MoveableObject {
     isDead = false;
     walkingInterval;
     animationInterval;
+    offset = {
+      top: 5,
+      bottom: 5,
+      left: 10,
+      right: 10    // kleiner Abstand rechts
+  };
 
     constructor(xPosition = 450 + Math.random() * 500) {
         super().loadImage(this.IMAGES_WALKING[0]);

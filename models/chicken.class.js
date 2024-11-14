@@ -11,6 +11,12 @@ class Chicken extends MoveableObject {
   isDead = false;
   walkInterval;
   animationInterval;
+  offset = {
+    top: 10,
+    bottom: 5,
+    left: 4,
+    right: 9
+  };
 
 constructor(xPosition = 450 + Math.random() * 500) {
   super().loadImage(
@@ -21,6 +27,7 @@ constructor(xPosition = 450 + Math.random() * 500) {
   this.speed = 0.15 + Math.random() * 0.6;
   this.animate();
 }
+
 
 animate() {
   this.walkInterval = setInterval(() => {

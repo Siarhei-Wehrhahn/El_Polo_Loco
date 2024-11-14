@@ -19,15 +19,21 @@ class DrawableObject {
   }
   
 
-    drawFrame(ctx) {
-      if (this instanceof Character || this instanceof Chicken) {
-        ctx.beginPath();
-        ctx.lineWidth = '5';
-        ctx.strokeStyle = 'red';
-        ctx.rect(this.x, this.y, this.width, this.height);
-        ctx.stroke();
-      }
+  drawFrame(ctx) {
+    if (this instanceof Endboss || this instanceof SmallChicken || this instanceof Chicken || this instanceof Character) {
+      const xPos = this.x + this.offset.left;
+      const yPos = this.y + this.offset.top;
+      const width = this.width - this.offset.left - this.offset.right;
+      const height = this.height - this.offset.top - this.offset.bottom;
+  
+      ctx.beginPath();
+      ctx.lineWidth = '5';
+      ctx.strokeStyle = 'red';
+      ctx.rect(xPos, yPos, width, height);
+      ctx.stroke();
     }
+  }
+  
 
     loadImages(arr) {
       arr.forEach((path) => {
