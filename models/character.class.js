@@ -58,6 +58,8 @@ class Character extends MoveableObject {
   jump_sound = new Audio("assets/audio/jump.mp3");
   currentImage = 0;
   coins = 0;
+  isJumping = false;
+  timeWithoutPushButton;
   offset = {
     top: 120,
     bottom: 19,
@@ -80,6 +82,15 @@ class Character extends MoveableObject {
       let currentDirection = null;
       this.walking_sound.pause();
   
+      if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.UP && !this.world.keyboard.DOWN && !this.world.keyboard.D && !this.world.keyboard.SPACE) {
+        if (!this.timeWithoutPushButton) {
+          this.timeWithoutPushButton = Date.now();
+        }
+      } else {
+        this.timeWithoutPushButton = null;
+      }
+      
+  
       if (this.world && this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         currentDirection = "RIGHT";
         this.otherDirection = false;
@@ -95,8 +106,12 @@ class Character extends MoveableObject {
       }
   
       if (this.world && (this.world.keyboard.UP || this.world.keyboard.SPACE) && !this.isAboveGround()) {
+        this.isJumping = true;
         this.jump();
         this.jump_sound.play();
+        setTimeout(() => {
+          this.isJumping = false;
+        }, 880);
       }
   
       this.world.camera_x = -this.x + 100;
@@ -122,14 +137,13 @@ class Character extends MoveableObject {
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
         this.playAnimation(this.IMAGES_JUMP);
+      } else if (this.timeWithoutPushButton - Date.now() > 2000) {
+        this.playAnimation(this.IMAGES_STAND);
+      } else if (this.world && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround()) {
+        this.playAnimation(this.IMAGES_WALKING);
       } else {
-        if (this.world && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround()) {
-          this.playAnimation(this.IMAGES_WALKING);
-        } else {
-          // this.playAnimation(this.IMAGES_STAND);
-        }
+        this.loadImage(this.IMAGES_STAND[0])
       }
     }, 50);
   }
-  
 }

@@ -11,6 +11,7 @@ class World {
   throwableObject = [];
   canThrowBottle = true;
   bottleCount = 5;
+  throwSound = new Audio('assets/audio/throw.mp3');
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -31,9 +32,19 @@ class World {
     }, 1000 / 60);
   }
 
+  playThrowSound() {
+    this.throwSound.currentTime = 0.81;
+    this.throwSound.play();
+    setTimeout(() => {
+      this.throwSound.pause();
+      this.throwSound.currentTime = 0;
+    }, 650)
+  }
+
   checkThrowObjects() {
     if (this.keyboard.D && this.canThrowBottle && this.bottleCount > 0) {
       this.bottleCount--;
+      this.playThrowSound();
       this.bottlebar.setPercentage(Math.min(this.bottleCount * 5, 100));
       let bottle = new ThrowableObject(
         this.character.x + 70,
@@ -51,33 +62,30 @@ class World {
   checkCollisions() {
     this.level.enemies.forEach((enemy) => {
       const enemyBottom = enemy.y + enemy.height - enemy.offset.bottom;
-  
+
       if (this.character.isColliding(enemy)) {
-        // Überprüfen, ob der Charakter das Huhn von oben trifft (für den Sprung)
-        if (
-          this.character.y + this.character.height - this.character.offset.bottom <= enemyBottom &&
-          this.character.speedY < 0
-        ) {
-          // Nur Schaden machen, wenn das Huhn noch nicht tot ist
+        if (this.character.y + this.character.height - this.character.offset.bottom <= enemyBottom && this.character.speedY < 0 && this.character.isJumping) {
           if (!enemy.isDead) {
             enemy.energy -= 50;
             if (enemy.energy <= 0) {
-              enemy.isDead = true;
-              enemy.showDeadChicken();
-              setTimeout(() => {
-                this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1);
-              }, 2000);
+              this.showDeadChicken(enemy);
             }
           }
-        } else if (this.character.speedY > 0 && !enemy.isDead) {
-          // Wenn der Charakter nach unten bewegt und das Huhn nicht tot ist, bekommt er Schaden
+        } else if (!enemy.isDead) {
           this.character.hit();
           this.statusbar.setPercentage(this.character.energy);
         }
       }
     });
   }
-   
+
+  showDeadChicken(enemy) {
+    enemy.isDead = true;
+    enemy.showDeadChicken();
+    setTimeout(() => {
+      this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1);
+    }, 2000);
+  }
 
   checkCoinCollisions() {
     this.level.coins.forEach((coin, index) => {
@@ -96,7 +104,7 @@ class World {
       if (bottle.hasHit) {
         return;
       }
-  
+
       this.level.enemies.forEach((enemy, index) => {
         if (enemy.isColliding(bottle)) {
           if (enemy.energy > 0) {
