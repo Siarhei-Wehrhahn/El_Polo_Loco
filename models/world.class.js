@@ -53,10 +53,12 @@ class World {
       const enemyBottom = enemy.y + enemy.height - enemy.offset.bottom;
   
       if (this.character.isColliding(enemy)) {
+        // Überprüfen, ob der Charakter das Huhn von oben trifft (für den Sprung)
         if (
           this.character.y + this.character.height - this.character.offset.bottom <= enemyBottom &&
           this.character.speedY < 0
         ) {
+          // Nur Schaden machen, wenn das Huhn noch nicht tot ist
           if (!enemy.isDead) {
             enemy.energy -= 50;
             if (enemy.energy <= 0) {
@@ -67,13 +69,15 @@ class World {
               }, 2000);
             }
           }
-        } else if (!enemy.isDead) {
+        } else if (this.character.speedY > 0 && !enemy.isDead) {
+          // Wenn der Charakter nach unten bewegt und das Huhn nicht tot ist, bekommt er Schaden
           this.character.hit();
           this.statusbar.setPercentage(this.character.energy);
         }
       }
     });
-  }  
+  }
+   
 
   checkCoinCollisions() {
     this.level.coins.forEach((coin, index) => {
@@ -154,7 +158,7 @@ class World {
       this.flipImage(mo);
     }
     mo.draw(this.ctx);
-    mo.drawFrame(this.ctx);
+    // mo.drawFrame(this.ctx);
     if (mo.otherDirection) {
       this.flipImageBack(mo);
     }
