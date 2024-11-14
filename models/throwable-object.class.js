@@ -31,15 +31,16 @@ class ThrowableObject extends MoveableObject {
   }
 
   throw() {
-      this.applyGravity();
-      this.speedY = 30;
-      this.throwInterval = setInterval(() => {
-          if (!this.hasHit) {
-              this.playAnimation(this.IMAGES_THROW);
-              this.x += 8;
-          }
-      }, 1000 / 60);
-  }
+    this.applyGravity();
+    this.speedY = 30;
+    this.throwInterval = setInterval(() => {
+        if (!this.hasHit) {
+            this.playAnimation(this.IMAGES_THROW);
+            this.x += this.speedX;
+        }
+    }, 1000 / 60);
+}
+
 
   applyGravity() {
       this.gravityInterval = setInterval(() => {

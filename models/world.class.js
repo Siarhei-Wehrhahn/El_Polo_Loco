@@ -43,21 +43,26 @@ class World {
 
   checkThrowObjects() {
     if (this.keyboard.D && this.canThrowBottle && this.bottleCount > 0) {
-      this.bottleCount--;
-      this.playThrowSound();
-      this.bottlebar.setPercentage(Math.min(this.bottleCount * 5, 100));
-      let bottle = new ThrowableObject(
-        this.character.x + 70,
-        this.character.y + 100,
-        this.character.bottles
-      );
-      this.throwableObject.push(bottle);
-      this.canThrowBottle = false;
-      setTimeout(() => {
-        this.canThrowBottle = true;
-      }, 1000);
+        this.bottleCount--;
+        this.playThrowSound();
+        this.bottlebar.setPercentage(Math.min(this.bottleCount * 5, 100));
+        
+        let bottle = new ThrowableObject(
+            this.character.x + (this.character.otherDirection ? -10 : 70),
+            this.character.y + 100,
+            this.character.bottles
+        );
+        
+        bottle.speedX = this.character.otherDirection ? -8 : 8;
+        
+        this.throwableObject.push(bottle);
+        this.canThrowBottle = false;
+        setTimeout(() => {
+            this.canThrowBottle = true;
+        }, 1000);
     }
-  }
+}
+
 
   checkCollisions() {
     this.level.enemies.forEach((enemy) => {
@@ -97,14 +102,14 @@ class World {
     });
   }
 
-  // TODO: in beide richtungen werfen , an den hühchen aufplatzen lassen, drauf springen , endboss, responsive machen
+  // TODO: in beide richtungen werfen ,endboss, responsive machen
 
   checkEnemiesCollision() {
     this.throwableObject.forEach((bottle) => {
         if (!bottle.hasHit) {
             this.level.enemies.forEach((enemy, index) => {
                 if (enemy.isColliding(bottle)) {
-                    bottle.triggerSplash(); // Löst die Zerplatzen-Animation aus
+                    bottle.triggerSplash();
                     if (enemy.energy > 0) {
                         enemy.energy -= 100;
                     }
