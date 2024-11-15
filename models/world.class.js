@@ -13,6 +13,10 @@ class World {
   canThrowBottle = true;
   bottleCount = 5;
   throwSound = new Audio("assets/audio/throw.mp3");
+  // TODO: Fertig machen
+  // ! Fireball Function
+  endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+  fireBall = new FireBall(this.endboss.x, this.endboss.y);
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -25,7 +29,7 @@ class World {
 
   run() {
     setInterval(() => {
-      this.checkBossCollision;
+      this.checkBossCollision();
       this.checkCollisions();
       this.checkThrowObjects();
       this.checkCoinCollisions();
@@ -45,53 +49,63 @@ class World {
 
   checkThrowObjects() {
     if (this.keyboard.D && this.canThrowBottle && this.bottleCount > 0) {
-      this.bottleCount--;
-      this.playThrowSound();
-      this.bossBar.setPercentage(Math.min(this.world.Endboss.energy * 5, 100));
+        this.bottleCount--;
+        this.playThrowSound();
 
-      let bottle = new ThrowableObject(
-        this.character.x + (this.character.otherDirection ? -10 : 70),
-        this.character.y + 100,
-        this.character.bottles
-      );
+        const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+        if (endboss) {
+            this.bossBar.setPercentage(Math.min(endboss.energy * 5, 100));
+        }
 
-      bottle.speedX = this.character.otherDirection ? -8 : 8;
+        let bottle = new ThrowableObject(
+            this.character.x + (this.character.otherDirection ? -10 : 70),
+            this.character.y + 100,
+            this.character.bottles
+        );
 
-      this.throwableObject.push(bottle);
-      this.canThrowBottle = false;
-      setTimeout(() => {
-        this.canThrowBottle = true;
-      }, 1000);
+        bottle.speedX = this.character.otherDirection ? -8 : 8;
+
+        this.throwableObject.push(bottle);
+        this.canThrowBottle = false;
+        setTimeout(() => {
+            this.canThrowBottle = true;
+        }, 1000);
     }
-  }
+}
 
-  checkBossCollision() {
-    this.throwableObject.forEach((bottle) => {
+checkBossCollision() {
+  this.throwableObject.forEach((bottle) => {
       if (!bottle.hasHit) {
-        this.level.enemies.forEach((enemy, index) => {
-          if (enemy.isColliding(bottle)) {
-            bottle.triggerSplash();
-  
-            if (enemy instanceof Endboss) {
-              this.coinbar.setPercentage(Math.min(this.character.coins * 2, 100));
-              enemy.energy -= 100;
-            } else if (enemy.energy > 0) {
-              enemy.energy -= 100;
-            }
-  
-            if (enemy.energy <= 0 && !enemy.isDead) {
-              enemy.isDead = true;
-              enemy.showDeadChicken();
-              setTimeout(() => {
-                this.level.enemies.splice(index, 1);
-              }, 500);
-            }
-          }
-        });
+          this.level.enemies.forEach((enemy, index) => {
+              if (enemy.isColliding(bottle)) {
+                  bottle.triggerSplash();
+                  bottle.hasHit = true;
+
+                  if (enemy instanceof Endboss) {
+                      enemy.energy -= 20;
+                      if (enemy.energy < 0) {
+                          enemy.energy = 0;
+                      }
+
+                      this.bossBar.setPercentage((enemy.energy / 100) * 100);
+                  }
+
+                  if (enemy.energy > 0) {
+                      enemy.energy -= 100;
+                  }
+
+                  if (enemy.energy <= 0 && !enemy.isDead) {
+                      enemy.isDead = true;
+                      enemy.showDeadChicken();
+                      setTimeout(() => {
+                          this.level.enemies.splice(index, 1);
+                      }, 500);
+                  }
+              }
+          });
       }
-    });
-  }
-  
+  });
+}
 
   checkCollisions() {
     this.level.enemies.forEach((enemy) => {
@@ -183,13 +197,15 @@ class World {
     this.addObjectToMap(this.level.backgroundObjects);
     this.addToMap(this.character);
     this.addObjectToMap(this.level.enemies);
+    // TODO: Fertig machen
+    // ! Fireball Function
+    this.addToMap(this.fireBall);
     this.addObjectToMap(this.level.clouds);
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusbar);
     this.addToMap(this.coinbar);
     this.addToMap(this.bottlebar);
-    if (this.character.x >= 100) {
-      // TODO Distance to the endboss
+    if (this.character.x >= 4000) {
       this.addToMap(this.bossBar);
   }
     this.ctx.translate(this.camera_x, 0);

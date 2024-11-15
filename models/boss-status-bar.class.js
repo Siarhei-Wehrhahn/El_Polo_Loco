@@ -35,8 +35,7 @@ class BossStatusBar extends StatusBar {
           loadedImages++;
           this.imageCache[imagePath] = img;
           if (loadedImages === totalImages) {
-            // Alle Bilder wurden erfolgreich geladen
-            this.setPercentage(this.percentage); // Jetzt kann das Bild angezeigt werden
+            this.setPercentage(this.percentage);
           }
         };
         img.onerror = () => {

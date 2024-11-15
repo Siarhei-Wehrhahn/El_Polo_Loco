@@ -6,6 +6,12 @@ class MoveableObject extends DrawableObject {
   energy = 100;
   lastHit = 0;
   bottles;
+  offset = {
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0
+  }
 
   applyGravity() {
     setInterval(() => {
@@ -40,13 +46,6 @@ class MoveableObject extends DrawableObject {
         console.error(`Bild nicht gefunden im Cache: ${imgPath}`);
       }
     }
-  }
-  
-  offset = {
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0
   }
 
   isColliding (mo) {
