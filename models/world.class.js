@@ -16,16 +16,36 @@ class World {
   // TODO: Fertig machen
   // ! Fireball Function
   endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-  fireBall = new FireBall(this.endboss.x, this.endboss.y);
+  fireballs = [];
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.setWorld();
+    this.endboss.world = this;
     this.draw();
     this.run();
+}
+
+
+shotFireBall() {
+  let fireBall = new FireBall(this.endboss.x, this.endboss.y);
+  this.throwableObject.push(fireBall);
+  fireBall.shot();
+  
+  setTimeout(() => {
+      this.removeFireBall(fireBall);
+  }, 2000);
+}
+
+removeFireBall(fireBall) {
+  const index = this.throwableObject.indexOf(fireBall);
+  if (index > -1) {
+      this.throwableObject.splice(index, 1);
   }
+}
+
 
   run() {
     setInterval(() => {
@@ -74,12 +94,12 @@ class World {
 }
 
 checkBossCollision() {
-  this.throwableObject.forEach((bottle) => {
-      if (!bottle.hasHit) {
+  this.throwableObject.forEach((projectile) => {
+      if (!projectile.hasHit) {
           this.level.enemies.forEach((enemy, index) => {
-              if (enemy.isColliding(bottle)) {
-                  bottle.triggerSplash();
-                  bottle.hasHit = true;
+              if (enemy.isColliding(projectile instanceof ThrowableObject)) {
+                  projectile.hasHit = true;
+                  projectile.triggerSplash();
 
                   if (enemy instanceof Endboss) {
                       enemy.energy -= 20;
@@ -106,6 +126,7 @@ checkBossCollision() {
       }
   });
 }
+
 
   checkCollisions() {
     this.level.enemies.forEach((enemy) => {
@@ -199,7 +220,6 @@ checkBossCollision() {
     this.addObjectToMap(this.level.enemies);
     // TODO: Fertig machen
     // ! Fireball Function
-    this.addToMap(this.fireBall);
     this.addObjectToMap(this.level.clouds);
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusbar);

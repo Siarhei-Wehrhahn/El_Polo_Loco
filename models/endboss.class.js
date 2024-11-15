@@ -56,7 +56,7 @@ class Endboss extends MoveableObject {
       this.loadImages(this.IMAGES_ATTACK);
       this.loadImages(this.IMAGES_HURT);
       this.loadImages(this.IMAGES_DEAD);
-      this.x = 200;
+      this.x = 800;
       this.animateBoss();
   }
 
@@ -98,21 +98,24 @@ class Endboss extends MoveableObject {
   }
 
   animateAttack() {
-      if (!this.isAnimating) {
-          this.isAnimating = true;
-          let counter = 0;
-          const attackInterval = setInterval(() => {
-              this.playAnimation(this.IMAGES_ATTACK);
-              this.animateFlash();
-              counter++;
-              if (counter >= this.IMAGES_ATTACK.length) {
-                  clearInterval(attackInterval);
-                  this.isAnimating = false;
-                  this.animateWalking();
-              }
-          }, 500);
-      }
-  }
+    if (!this.isAnimating) {
+        this.isAnimating = true;
+        let counter = 0;
+        const attackInterval = setInterval(() => {
+            this.playAnimation(this.IMAGES_ATTACK);
+            this.animateFlash();
+            counter++;
+            if (counter >= this.IMAGES_ATTACK.length) {
+                clearInterval(attackInterval);
+                this.isAnimating = false;
+                if (this.world) {
+                    this.world.shotFireBall();
+                }
+            }
+        }, 500);
+    }
+}
+
 
   animateFlash() {
       let fireBall = new FireBall(this.x, this.y);
