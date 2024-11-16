@@ -6,6 +6,7 @@ class MoveableObject extends DrawableObject {
   energy = 100;
   lastHit = 0;
   bottles;
+  hurtSound = new Audio('assets/audio/hurt.mp3');
   offset = {
     top: 0,
     bottom: 0,
@@ -58,6 +59,7 @@ class MoveableObject extends DrawableObject {
 hit() {
   let timePassed = new Date().getTime() - this.lastHit;
   if (timePassed > 1000) {
+    this.hurtSound.play();
     this.energy -= 5;
     if (this.energy < 0) {
       this.energy = 0;

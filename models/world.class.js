@@ -13,8 +13,8 @@ class World {
   canThrowBottle = true;
   bottleCount = 5;
   throwSound = new Audio("assets/audio/throw.mp3");
-  // TODO: Fertig machen
-  // ! Fireball Function
+  explosionSound = new Audio('assets/audio/explosion.mp3');
+  shotSound = new Audio('assets/audio/shot-fireball.mp3');
   endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
   fireballs = [];
 
@@ -31,13 +31,17 @@ class World {
 
 shotFireBall() {
   let fireBall = new FireBall(this.endboss.x, this.endboss.y);
-  this.throwableObject.push(fireBall);
+  this.fireballs.push(fireBall);
+  this.shotSound.currentTime = 0.9
+  this.shotSound.play()
+
   fireBall.shot();
   
   setTimeout(() => {
       this.removeFireBall(fireBall);
   }, 2000);
 }
+
 
 removeFireBall(fireBall) {
   const index = this.throwableObject.indexOf(fireBall);
@@ -47,16 +51,35 @@ removeFireBall(fireBall) {
 }
 
 
-  run() {
-    setInterval(() => {
-      this.checkBossCollision();
-      this.checkCollisions();
-      this.checkThrowObjects();
-      this.checkCoinCollisions();
-      this.checkBottleCollisions();
-      this.checkEnemiesCollision();
-    }, 1000 / 60);
+run() {
+  setInterval(() => {
+    this.checkBossCollision();
+    this.checkFireballCollision();
+    this.checkCollisions();
+    this.checkThrowObjects();
+    this.checkCoinCollisions();
+    this.checkBottleCollisions();
+    this.checkEnemiesCollision();
+  }, 1000 / 60);
+}
+
+
+  checkFireballCollision() {
+    this.fireballs.forEach((fireball, index) => {
+      if (!fireball.hasHit) {
+        if (this.character.isColliding(fireball)) {
+          fireball.hasHit = true;
+  
+          this.character.hit();
+          this.explosionSound.play();
+          this.statusbar.setPercentage(this.character.energy);
+  
+          this.fireballs.splice(index, 1);
+        }
+      }
+    });
   }
+  
 
   playThrowSound() {
     this.throwSound.currentTime = 0.81;
@@ -72,11 +95,6 @@ removeFireBall(fireBall) {
         this.bottleCount--;
         this.playThrowSound();
 
-        const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-        if (endboss) {
-            this.bossBar.setPercentage(Math.min(endboss.energy * 5, 100));
-        }
-
         let bottle = new ThrowableObject(
             this.character.x + (this.character.otherDirection ? -10 : 70),
             this.character.y + 100,
@@ -84,8 +102,8 @@ removeFireBall(fireBall) {
         );
 
         bottle.speedX = this.character.otherDirection ? -8 : 8;
-
         this.throwableObject.push(bottle);
+
         this.canThrowBottle = false;
         setTimeout(() => {
             this.canThrowBottle = true;
@@ -93,40 +111,37 @@ removeFireBall(fireBall) {
     }
 }
 
+
 checkBossCollision() {
-  this.throwableObject.forEach((projectile) => {
-      if (!projectile.hasHit) {
-          this.level.enemies.forEach((enemy, index) => {
-              if (enemy.isColliding(projectile instanceof ThrowableObject)) {
-                  projectile.hasHit = true;
-                  projectile.triggerSplash();
+  this.throwableObject.forEach((bottle, bottleIndex) => {
+    if (!bottle.hasHit) {
+      this.level.enemies.forEach((enemy) => {
+        if (enemy instanceof Endboss && enemy.isColliding(bottle)) {
+          bottle.triggerSplash();
+          bottle.hasHit = true;
+          
+          if (enemy.energy > 0) {
+            enemy.energy -= 20;
+            enemy.animateHurt();
+          } else {
+            if (!enemy.isDead) {
+              enemy.animateDead();
+            }
+          }
+          if (enemy.energy < 0) {
+            enemy.energy = 0;
+          } 
 
-                  if (enemy instanceof Endboss) {
-                      enemy.energy -= 20;
-                      if (enemy.energy < 0) {
-                          enemy.energy = 0;
-                      }
+          this.bossBar.setPercentage(enemy.energy);
 
-                      this.bossBar.setPercentage((enemy.energy / 100) * 100);
-                  }
-
-                  if (enemy.energy > 0) {
-                      enemy.energy -= 100;
-                  }
-
-                  if (enemy.energy <= 0 && !enemy.isDead) {
-                      enemy.isDead = true;
-                      enemy.showDeadChicken();
-                      setTimeout(() => {
-                          this.level.enemies.splice(index, 1);
-                      }, 500);
-                  }
-              }
-          });
-      }
+          setTimeout(() => {
+            this.throwableObject.splice(bottleIndex, 1);
+          }, 200);
+        }
+      });
+    }
   });
 }
-
 
   checkCollisions() {
     this.level.enemies.forEach((enemy) => {
@@ -173,7 +188,7 @@ checkBossCollision() {
     });
   }
 
-  // TODO: endboss, responsive machen
+  // TODO:responsive machen
 
   checkEnemiesCollision() {
     this.throwableObject.forEach((bottle) => {
@@ -218,8 +233,6 @@ checkBossCollision() {
     this.addObjectToMap(this.level.backgroundObjects);
     this.addToMap(this.character);
     this.addObjectToMap(this.level.enemies);
-    // TODO: Fertig machen
-    // ! Fireball Function
     this.addObjectToMap(this.level.clouds);
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusbar);
@@ -232,6 +245,7 @@ checkBossCollision() {
     this.addObjectToMap(this.level.coins);
     this.addObjectToMap(this.level.bottles);
     this.addObjectToMap(this.throwableObject);
+    this.addObjectToMap(this.fireballs);
     this.ctx.translate(-this.camera_x, 0);
 
     requestAnimationFrame(() => this.draw());
@@ -248,7 +262,7 @@ checkBossCollision() {
       this.flipImage(mo);
     }
     mo.draw(this.ctx);
-    // mo.drawFrame(this.ctx);
+    mo.drawFrame(this.ctx);
     if (mo.otherDirection) {
       this.flipImageBack(mo);
     }

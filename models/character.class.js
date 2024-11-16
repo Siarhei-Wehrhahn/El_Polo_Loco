@@ -55,7 +55,7 @@ class Character extends MoveableObject {
   ];
   world;
   walking_sound = new Audio("../assets/audio/running.mp3");
-  jump_sound = new Audio("assets/audio/jump.mp3");
+  jumpSound = new Audio("assets/audio/jump.mp3");
   currentImage = 0;
   coins = 0;
   isJumping = false;
@@ -64,8 +64,8 @@ class Character extends MoveableObject {
     top: 120,
     bottom: 19,
     left: 24,
-    right: 32
-  }
+    right: 32,
+  };
 
   constructor() {
     super().loadImage("assets/img/2_character_pepe/2_walk/W-21.png");
@@ -81,55 +81,76 @@ class Character extends MoveableObject {
     setInterval(() => {
       let currentDirection = null;
       this.walking_sound.pause();
-  
-      if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.UP && !this.world.keyboard.DOWN && !this.world.keyboard.D && !this.world.keyboard.SPACE) {
+
+      if (
+        !this.world.keyboard.RIGHT &&
+        !this.world.keyboard.LEFT &&
+        !this.world.keyboard.UP &&
+        !this.world.keyboard.DOWN &&
+        !this.world.keyboard.D &&
+        !this.world.keyboard.SPACE
+      ) {
         if (!this.timeWithoutPushButton) {
           this.timeWithoutPushButton = Date.now();
         }
       } else {
         this.timeWithoutPushButton = null;
       }
-      
-  
-      if (this.world && this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+
+      if (
+        this.world &&
+        this.world.keyboard.RIGHT &&
+        this.x < this.world.level.level_end_x
+      ) {
         currentDirection = "RIGHT";
         this.otherDirection = false;
         this.moveRight();
-        this.isAboveGround() ? this.walking_sound.pause() : this.walking_sound.play();
+        this.isAboveGround()
+          ? this.walking_sound.pause()
+          : this.walking_sound.play();
       }
-  
+
       if (this.world && this.world.keyboard.LEFT && this.x > 108) {
         currentDirection = "LEFT";
         this.otherDirection = true;
         this.moveLeft();
-        this.isAboveGround() ? this.walking_sound.pause() : this.walking_sound.play();
+        this.isAboveGround()
+          ? this.walking_sound.pause()
+          : this.walking_sound.play();
       }
-  
-      if (this.world && (this.world.keyboard.UP || this.world.keyboard.SPACE) && !this.isAboveGround()) {
+
+      if (
+        this.world &&
+        (this.world.keyboard.UP || this.world.keyboard.SPACE) &&
+        !this.isAboveGround()
+      ) {
         this.isJumping = true;
         this.jump();
-        this.jump_sound.play();
+        this.playJumpSound();
         setTimeout(() => {
           this.isJumping = false;
         }, 880);
       }
-  
+
       this.world.camera_x = -this.x + 100;
-  
-      if (currentDirection === this.lastDirection && currentDirection !== null) {
+
+      if (
+        currentDirection === this.lastDirection &&
+        currentDirection !== null
+      ) {
         this.walkDuration += 1000 / 60;
       } else {
         this.walkDuration = 0;
         this.speed = this.baseSpeed;
       }
-  
+
       if (this.walkDuration >= 2000) {
         this.speed = Math.min(this.speed + this.speedIncrement, this.maxSpeed);
       }
-  
+
       this.lastDirection = currentDirection;
     }, 1000 / 60);
-  
+
     setInterval(() => {
       if (this.isDead()) {
         this.playAnimation(this.IMAGES_DEAD);
@@ -139,11 +160,22 @@ class Character extends MoveableObject {
         this.playAnimation(this.IMAGES_JUMP);
       } else if (this.timeWithoutPushButton - Date.now() > 2000) {
         this.playAnimation(this.IMAGES_STAND);
-      } else if (this.world && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround()) {
+      } else if (
+        this.world &&
+        (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) &&
+        !this.isAboveGround()
+      ) {
         this.playAnimation(this.IMAGES_WALKING);
       } else {
-        this.loadImage(this.IMAGES_STAND[0])
+        this.loadImage(this.IMAGES_STAND[0]);
       }
     }, 50);
+  }
+
+  playJumpSound() {
+    if (this.jumpSound.paused) {
+      this.jumpSound.currentTime = 0;
+      this.jumpSound.play();
+    }
   }
 }

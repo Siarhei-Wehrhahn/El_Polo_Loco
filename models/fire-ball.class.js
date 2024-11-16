@@ -38,11 +38,14 @@ class FireBall extends MoveableObject {
       ];
       currentImage = 0;
       hasHit = false;
-      explosionSound = new Audio('assets/audio/explosion.mp3');
       otherDirection = true;
+      offset = {
+        top: 62,
+        bottom: 35,
+        left: 80,
+        right: 7
+      }
 
-  // TODO: Fertig machen
-  // ! Fireball Function
     constructor(x, y) {
         super().loadImage(this.IMAGES_SHOT[0]);
         this.loadImages(this.IMAGES_SHOT);
@@ -51,7 +54,7 @@ class FireBall extends MoveableObject {
     }
 
     shot() {
-        let shotinterval = setInterval(() => {
+        let shotInterval = setInterval(() => {
             if(!this.hasHit) {
                 this.playAnimation(this.IMAGES_SHOT);
                 this.x += this.speedX;
