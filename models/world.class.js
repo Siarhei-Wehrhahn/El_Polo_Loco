@@ -17,6 +17,7 @@ class World {
   shotSound = new Audio('assets/audio/shot-fireball.mp3');
   endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
   fireballs = [];
+  animationPlayed = false;
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -121,12 +122,11 @@ checkBossCollision() {
           bottle.hasHit = true;
           
           if (enemy.energy > 0) {
-            enemy.energy -= 20;
+            enemy.energy -= 10;
             enemy.animateHurt();
-          } else {
-            if (!enemy.isDead) {
-              enemy.animateDead();
-            }
+          } else if(enemy.energy <= 0 && !this.animationPlayed) {
+            this.animationPlayed = true;
+            enemy.animateDead();
           }
           if (enemy.energy < 0) {
             enemy.energy = 0;
@@ -262,7 +262,7 @@ checkBossCollision() {
       this.flipImage(mo);
     }
     mo.draw(this.ctx);
-    mo.drawFrame(this.ctx);
+    // mo.drawFrame(this.ctx);
     if (mo.otherDirection) {
       this.flipImageBack(mo);
     }

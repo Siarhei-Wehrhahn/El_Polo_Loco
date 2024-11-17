@@ -58,7 +58,7 @@ class MoveableObject extends DrawableObject {
   
 hit() {
   let timePassed = new Date().getTime() - this.lastHit;
-  if (timePassed > 1000) {
+  if (timePassed > 1000 && this.energy > 0) {
     this.hurtSound.play();
     this.energy -= 5;
     if (this.energy < 0) {

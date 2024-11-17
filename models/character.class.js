@@ -54,12 +54,13 @@ class Character extends MoveableObject {
     "assets/img/2_character_pepe/5_dead/D-57.png",
   ];
   world;
-  walking_sound = new Audio("../assets/audio/running.mp3");
+  walkingSound = new Audio("../assets/audio/running.mp3");
   jumpSound = new Audio("assets/audio/jump.mp3");
   currentImage = 0;
   coins = 0;
   isJumping = false;
   timeWithoutPushButton;
+  animationPlayed = false;
   offset = {
     top: 120,
     bottom: 19,
@@ -80,8 +81,9 @@ class Character extends MoveableObject {
   animate() {
     setInterval(() => {
       let currentDirection = null;
-      this.walking_sound.pause();
+      this.walkingSound.pause();
 
+      // TODO : insert wait animation
       if (
         !this.world.keyboard.RIGHT &&
         !this.world.keyboard.LEFT &&
@@ -100,29 +102,30 @@ class Character extends MoveableObject {
       if (
         this.world &&
         this.world.keyboard.RIGHT &&
-        this.x < this.world.level.level_end_x
+        this.x < this.world.level.level_end_x && 
+        this.energy > 0
       ) {
         currentDirection = "RIGHT";
         this.otherDirection = false;
         this.moveRight();
         this.isAboveGround()
-          ? this.walking_sound.pause()
-          : this.walking_sound.play();
+          ? this.walkingSound.pause()
+          : this.walkingSound.play();
       }
 
-      if (this.world && this.world.keyboard.LEFT && this.x > 108) {
+      if (this.world && this.world.keyboard.LEFT && this.x > 108 && this.energy > 0) {
         currentDirection = "LEFT";
         this.otherDirection = true;
         this.moveLeft();
         this.isAboveGround()
-          ? this.walking_sound.pause()
-          : this.walking_sound.play();
+          ? this.walkingSound.pause()
+          : this.walkingSound.play();
       }
 
       if (
         this.world &&
         (this.world.keyboard.UP || this.world.keyboard.SPACE) &&
-        !this.isAboveGround()
+        !this.isAboveGround() && this.energy > 0
       ) {
         this.isJumping = true;
         this.jump();
@@ -152,8 +155,9 @@ class Character extends MoveableObject {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.isDead()) {
-        this.playAnimation(this.IMAGES_DEAD);
+      if (this.isDead()  && !animationPlayed) {
+        this.playAnimationOnce(this.IMAGES_DEAD);
+        this.animationPlayed = true;
       } else if (this.isHurt() && !this.isDead()) {
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
@@ -178,4 +182,15 @@ class Character extends MoveableObject {
       this.jumpSound.play();
     }
   }
+
+  playAnimationOnce(images) {
+    let index = 0;
+    const interval = setInterval(() => {
+        this.img = this.imageCache[images[index]];
+        index++;
+        if (index >= images.length) {
+            clearInterval(interval);
+        }
+    }, 100);
+}
 }

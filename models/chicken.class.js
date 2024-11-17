@@ -18,7 +18,7 @@ class Chicken extends MoveableObject {
     right: 9
   };
 
-constructor(xPosition = 450 + Math.random() * 500) {
+constructor(xPosition = 850 + Math.random() * 500) {
   super().loadImage(
     'assets/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png'
   );

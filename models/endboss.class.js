@@ -62,7 +62,6 @@ class Endboss extends MoveableObject {
   }
 
   animateBoss() {
-    // Stelle sicher, dass world und character vorhanden sind
     const checkProximityInterval = setInterval(() => {
       if (this.world && this.world.character && this.world.character.x + this.world.character.width >= this.x - 500) {
         clearInterval(checkProximityInterval);
@@ -70,7 +69,6 @@ class Endboss extends MoveableObject {
       }
     }, 100);
   }
-  
 
   loopAnimations() {
     if (this.energy > 0) {
@@ -167,6 +165,13 @@ class Endboss extends MoveableObject {
       }
     }
   }
+
+  remove() {
+    const index = this.world.level.enemies.indexOf(this);
+    if (index !== -1) {
+      this.world.level.enemies.splice(index, 1);
+    }
+  }  
 
   takeDamage(damage) {
     this.energy -= damage;

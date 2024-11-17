@@ -10,7 +10,6 @@ class Level {
     this.enemies = enemies;
     this.clouds = clouds;
     this.backgroundObjects = backgroundObjects;
-    this.createMoreChicken();
   }
 
   spawnBottles() {
@@ -60,20 +59,23 @@ class Level {
   }
 
   createMoreChicken() {
-    setInterval(() => {
-      if (world.character.x < this.level_end_x) {
-        const spawnDistance = 1000 + Math.random() * 100;
-        const chickenPosition = world.character.x + spawnDistance;
+    setTimeout(() => {
+        setInterval(() => {
+            if (world && world.character) {
+                const spawnDistance = 1000 + Math.random() * 100;
+                const chickenPosition = world.character.x + spawnDistance;
 
-        const newChicken = [
-          new Chicken(chickenPosition),
-          new SmallChicken(chickenPosition + 40),
-          new Chicken(chickenPosition + 50),
-          new SmallChicken(chickenPosition + 70),
-        ];
+                const newChicken = [
+                    new Chicken(chickenPosition),
+                    new SmallChicken(chickenPosition + 40),
+                    new Chicken(chickenPosition + 50),
+                    new SmallChicken(chickenPosition + 70),
+                ];
 
-        this.enemies.push(...newChicken);
-      }
-    }, 1000 * 5);
-  }
+                this.enemies.push(...newChicken);
+            }
+        }, 1000 * 5);
+    }, 4000);
+}
+
 }
