@@ -63,7 +63,7 @@ class Endboss extends MoveableObject {
 
   animateBoss() {
     const checkProximityInterval = setInterval(() => {
-      if (this.world && this.world.character && this.world.character.x + this.world.character.width >= this.x - 500) {
+      if (this.world && this.world.character && this.energy > 0 && this.world.character.x + this.world.character.width >= this.x - 500) {
         clearInterval(checkProximityInterval);
         this.loopAnimations();
       }
@@ -71,20 +71,25 @@ class Endboss extends MoveableObject {
   }
 
   loopAnimations() {
-    if (this.energy > 0) {
-      this.animateWalking(() => {
-        this.animateAlert(() => {
-          this.animateAttack(() => {
-            this.loopAnimations();
-          });
+    if (this.isDead || this.energy <= 0) return;
+    this.animateWalking(() => {
+      this.animateAlert(() => {
+        this.animateAttack(() => {
+          this.loopAnimations();
         });
       });
-    }
+    });
   }
+   
 
   animateWalking(callback) {
+    if (this.isDead) return;
     let counter = 0;
     const walkingInterval = setInterval(() => {
+      if (this.isDead) {
+        clearInterval(walkingInterval);
+        return;
+      }
       this.playAnimation(this.IMAGES_WALKING);
       this.x -= 1;
       counter++;
@@ -93,7 +98,7 @@ class Endboss extends MoveableObject {
         if (callback) callback();
       }
     }, 200);
-  }
+  }  
 
   animateAlert(callback) {
     let counter = 0;
@@ -108,8 +113,13 @@ class Endboss extends MoveableObject {
   }
 
   animateAttack(callback) {
+    if (this.isDead) return;
     let counter = 0;
     const attackInterval = setInterval(() => {
+      if (this.isDead) {
+        clearInterval(attackInterval);
+        return;
+      }
       this.playAnimation(this.IMAGES_ATTACK);
       counter++;
       if (counter >= this.IMAGES_ATTACK.length) {
@@ -117,20 +127,27 @@ class Endboss extends MoveableObject {
         if (callback) callback();
       }
     }, 500);
-    this.animateFlash();
-    this.world.shotFireBall();
-  }
+    if (!this.isDead) this.animateFlash();
+    if (!this.isDead) this.world.shotFireBall();
+  }  
 
   animateFlash() {
+    if (this.isDead) return;
     let fireBall = new FireBall(this.x, this.y);
     this.fireballs.push(fireBall);
-    setInterval(() => {
+    const fireballInterval = setInterval(() => {
+      if (this.isDead) {
+        clearInterval(fireballInterval);
+        return;
+      }
       fireBall.shot();
     }, 1000 / 60);
+  
     setTimeout(() => {
+      clearInterval(fireballInterval);
       this.fireballs.splice(this.fireballs.indexOf(fireBall), 1);
     }, 2000);
-  }
+  }  
 
   animateHurt() {
     if (!this.isAnimating) {
@@ -148,23 +165,29 @@ class Endboss extends MoveableObject {
   }
 
   animateDead() {
-    if (!this.isDead) {
-      this.isDead = true;
-      if (!this.isAnimating) {
-        this.isAnimating = true;
-        let counter = 0;
-        const deadInterval = setInterval(() => {
-          this.playAnimation(this.IMAGES_DEAD);
-          counter++;
-          if (counter >= this.IMAGES_DEAD.length) {
-            clearInterval(deadInterval);
-            this.isAnimating = false;
-            setTimeout(() => this.remove(), 1000);
-          }
-        }, 500);
+    if (this.isDead || this.isAnimating) return;
+  
+    this.clearAllIntervals();
+    this.isDead = true;
+    this.isAnimating = true;
+  
+    let counter = 0;
+    const deadInterval = setInterval(() => {
+      this.playAnimation(this.IMAGES_DEAD);
+      counter++;
+      if (counter >= this.IMAGES_DEAD.length) {
+        clearInterval(deadInterval);
+        this.isAnimating = false;
+        setTimeout(() => this.remove(), 1000);
       }
-    }
-  }
+    }, 500);
+  }  
+  
+  clearAllIntervals() {
+    if (this.walkingInterval) clearInterval(this.walkingInterval);
+    if (this.alertInterval) clearInterval(this.alertInterval);
+    if (this.attackInterval) clearInterval(this.attackInterval);
+  }  
 
   remove() {
     const index = this.world.level.enemies.indexOf(this);
@@ -174,17 +197,19 @@ class Endboss extends MoveableObject {
   }  
 
   takeDamage(damage) {
+    if (this.isDead) return;
+  
     this.energy -= damage;
+  
     if (this.energy <= 0) {
-      if (!this.isAnimating) {
-        this.die();
-      }
+      this.die();
     } else if (!this.isAnimating) {
       this.animateHurt();
     }
   }
-
+  
   die() {
+    if (this.isDead) return;
     this.animateDead();
   }
 }

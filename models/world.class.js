@@ -18,6 +18,7 @@ class World {
   endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
   fireballs = [];
   animationPlayed = false;
+  showWinningScreenInstance = new ShowWinningScreen();
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -27,8 +28,7 @@ class World {
     this.endboss.world = this;
     this.draw();
     this.run();
-}
-
+  }
 
 shotFireBall() {
   let fireBall = new FireBall(this.endboss.x, this.endboss.y);
@@ -61,7 +61,17 @@ run() {
     this.checkCoinCollisions();
     this.checkBottleCollisions();
     this.checkEnemiesCollision();
+    this.checkWin();
   }, 1000 / 60);
+}
+
+// TODO: ! WinninSScreen
+checkWin() {
+  this.level.enemies.forEach((enemy) => {
+      if (enemy.energy <= 0 && enemy instanceof Endboss && !this.animationPlayed) {
+          this.addToMap(this.showWinningScreenInstance);
+      }
+  });
 }
 
 
@@ -241,6 +251,7 @@ checkBossCollision() {
     if (this.character.x >= 4000) {
       this.addToMap(this.bossBar);
   }
+  
     this.ctx.translate(this.camera_x, 0);
     this.addObjectToMap(this.level.coins);
     this.addObjectToMap(this.level.bottles);
