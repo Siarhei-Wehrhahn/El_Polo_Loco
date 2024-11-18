@@ -7,12 +7,25 @@ class MoveableObject extends DrawableObject {
   lastHit = 0;
   bottles;
   hurtSound = new Audio('assets/audio/hurt.mp3');
+  audios = [
+    'assets/audio/splat/splat.mp3',
+    'assets/audio/splat/splat1.mp3',
+    'assets/audio/splat/splat2.mp3',
+    'assets/audio/splat/splat3.mp3',
+  ]
   offset = {
     top: 0,
     bottom: 0,
     left: 0,
     right: 0
   }
+
+  playRandomAudio() {
+    const randomSoundPath = this.audios[Math.floor(Math.random() * this.audios.length)];
+    const audioPlayer = new Audio(randomSoundPath);
+    audioPlayer.volume = 0.5;
+    audioPlayer.play();
+}
 
   applyGravity() {
     setInterval(() => {
