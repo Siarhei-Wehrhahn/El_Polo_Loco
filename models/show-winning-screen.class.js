@@ -21,13 +21,14 @@ showWinningScreen(x) {
     this.x = x + 200;
     this.animationInterval = setInterval(() => {
         this.playAnimation(this.IMAGES_WIN);
-      }, 200);
+    }, 200);
 
     setTimeout(() => {
         clearInterval(this.animationInterval);
         this.showRestartButton();
     }, 5000);
 }
+
 
 
     showRestartButton() {

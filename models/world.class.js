@@ -142,6 +142,9 @@ checkBossCollision() {
           } else if (enemy.energy <= 0 && !this.animationPlayed) {
             this.animationPlayed = true;
             enemy.animateDead();
+            this.level.enemies.forEach(enemy => {
+              this.level.enemies.splice(this.level.enemies.indexOf(enemy), 50);
+          });
             this.showWinningScreenInstance.showWinningScreen(this.character.x);
           }
           if (enemy.energy < 0) {
@@ -210,7 +213,7 @@ checkBossCollision() {
 
             if (enemy.energy <= 0 && !enemy.isDead) {
               enemy.isDead = true;
-              enemy.deadChicken();
+              this.showDeadChicken();
               setTimeout(() => {
                 this.level.enemies.splice(index, 1);
               }, 500);
