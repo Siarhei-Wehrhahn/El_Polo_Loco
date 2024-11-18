@@ -85,6 +85,9 @@ run() {
 
 checkForLose() {
   if(this.character.energy <= 0) {
+    this.level.enemies.forEach(enemy => {
+      this.level.enemies.splice(this.level.enemies.indexOf(enemy), 50);
+  });
     this.showWinningScreenInstance.showLoseScreen(this.character.x)
   }
 }
