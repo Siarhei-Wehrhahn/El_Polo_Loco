@@ -79,7 +79,14 @@ run() {
     this.checkCoinCollisions();
     this.checkBottleCollisions();
     this.checkEnemiesCollision();
+    this.checkForLose();
   }, 1000 / 60);
+}
+
+checkForLose() {
+  if(this.character.energy <= 0) {
+    this.showWinningScreenInstance.showLoseScreen(this.character.x)
+  }
 }
 
 checkFireballCollision() {

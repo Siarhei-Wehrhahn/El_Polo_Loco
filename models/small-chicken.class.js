@@ -18,7 +18,7 @@ class SmallChicken extends MoveableObject {
       right: 10
   };
 
-    constructor(xPosition = 450 + Math.random() * 500) {
+    constructor(xPosition = 850 + Math.random() * 500) {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
         this.x = xPosition;

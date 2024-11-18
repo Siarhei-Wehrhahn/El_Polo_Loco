@@ -118,7 +118,7 @@ class Character extends MoveableObject {
             this.otherDirection = true;
             this.moveLeft();
             if (!this.isAboveGround()) {
-                this.playWalkingSound(); // Play sound only when walking
+                this.playWalkingSound();
             }
         }
 
