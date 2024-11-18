@@ -1,6 +1,6 @@
 class ShowWinningScreen extends MoveableObject {
-    x = 5800;
-    y = 150;
+    x;
+    y = 1500;
     width = 400;
     height = 200;
     currentImage = 0;
@@ -11,14 +11,20 @@ class ShowWinningScreen extends MoveableObject {
     ];
 
     constructor() {
-        super().loadImage('assets/img/9_intro_outro_screens/win/won_1.png');
+        super()
+        this.loadImage(this.IMAGES_WIN[0]);
         this.loadImages(this.IMAGES_WIN);
     }
 // TODO: ! WinninSScreen
-showWinningScreen() {
-    this.playAnimation(this.IMAGES_WIN);
+showWinningScreen(x) {
+    this.y = 150;
+    this.x = x + 200;
+    this.animationInterval = setInterval(() => {
+        this.playAnimation(this.IMAGES_WIN);
+      }, 200);
 
     setTimeout(() => {
+        clearInterval(this.animationInterval);
         this.showRestartButton();
     }, 5000);
 }

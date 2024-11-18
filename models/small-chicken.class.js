@@ -15,7 +15,7 @@ class SmallChicken extends MoveableObject {
       top: 5,
       bottom: 5,
       left: 10,
-      right: 10    // kleiner Abstand rechts
+      right: 10
   };
 
     constructor(xPosition = 450 + Math.random() * 500) {

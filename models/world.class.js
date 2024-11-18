@@ -142,8 +142,7 @@ checkBossCollision() {
           } else if (enemy.energy <= 0 && !this.animationPlayed) {
             this.animationPlayed = true;
             enemy.animateDead();
-            this.addToMap(this.showWinningScreenInstance);
-            this.showWinningScreenInstance.showWinningScreen();
+            this.showWinningScreenInstance.showWinningScreen(this.character.x);
           }
           if (enemy.energy < 0) {
             enemy.energy = 0;
@@ -170,7 +169,7 @@ checkBossCollision() {
             enemy.energy -= 50;
             if (enemy.energy <= 0) {
               enemy.isDead = true
-              enemy.deadChicken();
+              this.showDeadChicken(enemy);
             }
           }
         } else if (!enemy.isDead) {
@@ -255,6 +254,7 @@ checkBossCollision() {
     this.addObjectToMap(this.level.bottles);
     this.addObjectToMap(this.throwableObject);
     this.addObjectToMap(this.fireballs);
+      this.addToMap(this.showWinningScreenInstance);
     this.ctx.translate(-this.camera_x, 0);
 
     requestAnimationFrame(() => this.draw());
