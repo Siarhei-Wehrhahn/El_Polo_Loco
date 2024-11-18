@@ -42,7 +42,7 @@ animate() {
   }, 200);
 }
 
-showDeadChicken() {
+deadChicken() {
   clearInterval(this.walkInterval);
   clearInterval(this.animationInterval);
   this.loadImage('assets/img/3_enemies_chicken/chicken_normal/2_dead/dead.png');

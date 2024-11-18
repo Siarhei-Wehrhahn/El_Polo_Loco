@@ -59,7 +59,7 @@ class MoveableObject extends DrawableObject {
 hit() {
   let timePassed = new Date().getTime() - this.lastHit;
   if (timePassed > 1000 && this.energy > 0) {
-    this.hurtSound.play();
+    this.playHurtSound();
     this.energy -= 5;
     if (this.energy < 0) {
       this.energy = 0;
@@ -68,6 +68,14 @@ hit() {
   }
 }
 
+playHurtSound() {
+  if (this.hurtSound.readyState === 4) {
+    if (this.hurtSound.paused) {
+      this.hurtSound.currentTime = 0;
+      this.hurtSound.play();
+    }
+  }
+}
 
   isHurt() {
     let timePassed = new Date().getTime() - this.lastHit;

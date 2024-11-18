@@ -1,7 +1,7 @@
 class ShowWinningScreen extends MoveableObject {
-    x = 415;
+    x = 5800;
     y = 150;
-    width = 200;
+    width = 400;
     height = 200;
     currentImage = 0;
 
@@ -15,14 +15,14 @@ class ShowWinningScreen extends MoveableObject {
         this.loadImages(this.IMAGES_WIN);
     }
 // TODO: ! WinninSScreen
-    showWinningScreen() {
-        this.playAnimation(this.IMAGES_WIN);
+showWinningScreen() {
+    this.playAnimation(this.IMAGES_WIN);
 
+    setTimeout(() => {
+        this.showRestartButton();
+    }, 5000);
+}
 
-        setTimeout(() => {
-            this.showRestartButton();
-        }, 5000);
-    }
 
     showRestartButton() {
         const button = document.createElement("button");

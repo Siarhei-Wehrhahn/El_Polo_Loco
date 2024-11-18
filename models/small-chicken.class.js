@@ -39,7 +39,7 @@ class SmallChicken extends MoveableObject {
         }, 200);
       }
       
-      showDeadChicken() {
+      deadChicken() {
         clearInterval(this.walkInterval);
         clearInterval(this.animationInterval);
         this.loadImage('assets/img/3_enemies_chicken/chicken_small/2_dead/dead.png');

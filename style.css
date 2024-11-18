@@ -13,7 +13,6 @@
     padding: 5px;
     width: 1050px;
     height: 480px;
-
 }
 
 canvas {
@@ -22,11 +21,51 @@ canvas {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(232, 93, 4, 0.6), 0 0 20px rgba(241, 161, 34, 0.6);
     padding: 5px;
+    display: block;
+}
+
+@media only screen and (max-width: 1050px) {
+  canvas {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-height: 480px) {
+  canvas {
+    height: 100%;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .start-screen {
+    background-color: black;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+}
+
+  h1 {
+    display: none!important;
+  }
+
+  .control {
+    display: none!important;
+  }
+
+  #fullScreenIcon {
+    display: none;
+  }
 }
 
 h1 {
     font-size: 80px;
     margin-top: 70px;
+    margin-bottom: 0;
     font-family: 'GloriaHallelujah', sans-serif;
     color: #e63946;
     text-shadow: 4px 4px #457b9d, -2px -2px #f4a261;
@@ -62,6 +101,7 @@ body {
     flex-direction: row;
     gap: 24px;
     padding-inline: 30px;
+    margin-top: -170px;
 }
 
 .box {
@@ -84,9 +124,19 @@ body {
 #fullScreenIcon {
     height: 30px;
     position: relative;
-    top: -7.5%;
-    right: -28%;
+    top: -170px;
+    right: -480px;
     cursor: pointer;
+}
+
+.main {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 40px;
 }
 
 /* From Uiverse.io by KSAplay */
