@@ -73,7 +73,7 @@ hit() {
   let timePassed = new Date().getTime() - this.lastHit;
   if (timePassed > 1000 && this.energy > 0) {
     this.playHurtSound();
-    this.energy -= 5;
+    this.energy -= 15;
     if (this.energy < 0) {
       this.energy = 0;
     }
