@@ -61,6 +61,7 @@ class Character extends MoveableObject {
   isJumping = false;
   timeWithoutPushButton;
   animationPlayed = false;
+  gameEnd = false;
   offset = {
     top: 120,
     bottom: 19,
@@ -82,19 +83,21 @@ class Character extends MoveableObject {
     setInterval(() => {
         let currentDirection = null;
 
-        // Pause walking sound only when no movement keys are pressed
         if (
             !this.world.keyboard.RIGHT &&
             !this.world.keyboard.LEFT &&
             !this.world.keyboard.UP &&
             !this.world.keyboard.DOWN &&
             !this.world.keyboard.D &&
-            !this.world.keyboard.SPACE
+            !this.world.keyboard.SPACE && 
+            !this.gameEnd
         ) {
             if (!this.timeWithoutPushButton) {
                 this.timeWithoutPushButton = Date.now();
+                console.log(this.timeWithoutPushButton);
+                
             }
-            this.walkingSound.pause(); // Pause sound when idle
+            this.walkingSound.pause();
         } else {
             this.timeWithoutPushButton = null;
         }
@@ -103,17 +106,18 @@ class Character extends MoveableObject {
             this.world &&
             this.world.keyboard.RIGHT &&
             this.x < this.world.level.level_end_x &&
-            this.energy > 0
+            this.energy > 0 && 
+            !this.gameEnd
         ) {
             currentDirection = "RIGHT";
             this.otherDirection = false;
             this.moveRight();
             if (!this.isAboveGround()) {
-                this.playWalkingSound(); // Play sound only when walking
+                this.playWalkingSound();
             }
         }
 
-        if (this.world && this.world.keyboard.LEFT && this.x > 108 && this.energy > 0) {
+        if (this.world && this.world.keyboard.LEFT && this.x > 108 && this.energy > 0 && !this.gameEnd) {
             currentDirection = "LEFT";
             this.otherDirection = true;
             this.moveLeft();
@@ -125,7 +129,7 @@ class Character extends MoveableObject {
         if (
             this.world &&
             (this.world.keyboard.UP || this.world.keyboard.SPACE) &&
-            !this.isAboveGround() && this.energy > 0
+            !this.isAboveGround() && this.energy > 0 && !this.gameEnd
         ) {
             this.isJumping = true;
             this.jump();

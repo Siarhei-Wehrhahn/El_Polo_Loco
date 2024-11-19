@@ -19,6 +19,8 @@ class World {
   fireballs = [];
   animationPlayed = false;
   showWinningScreenInstance = new ShowWinningScreen();
+  fullLife = 100;
+  smallHit = 10;
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -83,10 +85,21 @@ run() {
   }, 1000 / 60);
 }
 
+clearGameObjects() {
+  this.level.enemies = [];
+  this.level.coins = [];
+  this.level.bottles = [];
+  this.throwableObject = [];
+  this.fireballs = [];
+  this.character = null;
+  this.level = null;
+}
+
 checkForLose() {
   if(this.character.energy <= 0) {
+    this.character.gameEnd = true;
     this.level.enemies.forEach(enemy => {
-      this.level.enemies.splice(this.level.enemies.indexOf(enemy), 50);
+      this.level.enemies.splice(this.level.enemies.indexOf(enemy), 100);
   });
     this.showWinningScreenInstance.showLoseScreen(this.character.x)
   }
@@ -95,7 +108,7 @@ checkForLose() {
 checkFireballCollision() {
   this.fireballs.forEach((fireball, index) => {
     if (!fireball.hasHit) {
-      if (this.character.isColliding(fireball)) {
+      if (this.character.isColliding(fireball) && !this.character.gameEnd) {
         fireball.hasHit = true;
 
         this.character.hit();
@@ -147,13 +160,14 @@ checkBossCollision() {
           bottle.hasHit = true;
 
           if (enemy.energy > 0) {
-            enemy.energy -= 10;
+            enemy.energy -= this.smallHit;
             enemy.animateHurt();
           } else if (enemy.energy <= 0 && !this.animationPlayed) {
             this.animationPlayed = true;
             enemy.animateDead();
+            this.character.gameEnd = true;
             this.level.enemies.forEach(enemy => {
-              this.level.enemies.splice(this.level.enemies.indexOf(enemy), 50);
+              this.level.enemies.splice(this.level.enemies.indexOf(enemy), 100);
           });
             this.showWinningScreenInstance.showWinningScreen(this.character.x);
           }
@@ -176,16 +190,16 @@ checkBossCollision() {
     this.level.enemies.forEach((enemy) => {
       const enemyBottom = enemy.y + enemy.height - enemy.offset.bottom;
 
-      if (this.character.isColliding(enemy)) {
+      if (this.character.isColliding(enemy) && !this.character.gameEnd) {
         if (this.character.isAboveGround() && this.character.speedY < 0) {
           if (!enemy.isDead) {
-            enemy.energy -= 50;
+            enemy.energy -= this.fullLife;
             if (enemy.energy <= 0) {
               enemy.isDead = true
               this.showDeadChicken(enemy);
             }
           }
-        } else if (!enemy.isDead) {
+        } else if (!enemy.isDead && !this.character.gameEnd) {
           this.character.hit();
           this.statusbar.setPercentage(this.character.energy);
         }
@@ -194,7 +208,6 @@ checkBossCollision() {
   }
 
   showDeadChicken(enemy) {
-    enemy.isDead = true;
     enemy.deadChicken();
     setTimeout(() => {
       this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1);
@@ -215,15 +228,15 @@ checkBossCollision() {
     this.throwableObject.forEach((bottle) => {
       if (!bottle.hasHit) {
         this.level.enemies.forEach((enemy, index) => {
-          if (enemy.isColliding(bottle)) {
+          if (enemy.isColliding(bottle) && !this.character.gameEnd) {
             bottle.triggerSplash();
             if (enemy.energy > 0) {
-              enemy.energy -= 100;
+              enemy.energy -= this.fullLife;
             }
 
             if (enemy.energy <= 0 && !enemy.isDead) {
               enemy.isDead = true;
-              this.showDeadChicken();
+              this.showDeadChicken(enemy);
               setTimeout(() => {
                 this.level.enemies.splice(index, 1);
               }, 500);
