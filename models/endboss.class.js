@@ -63,7 +63,12 @@ class Endboss extends MoveableObject {
 
   animateBoss() {
     const checkProximityInterval = setInterval(() => {
-      if (this.world && this.world.character && this.energy > 0 && this.world.character.x + this.world.character.width >= this.x - 500) {
+      if (
+        this.world &&
+        this.world.character &&
+        this.energy > 0 &&
+        this.world.character.x + this.world.character.width >= this.x - 500
+      ) {
         clearInterval(checkProximityInterval);
         this.loopAnimations();
       }
@@ -80,7 +85,6 @@ class Endboss extends MoveableObject {
       });
     });
   }
-   
 
   animateWalking(callback) {
     if (this.isDead) return;
@@ -98,7 +102,7 @@ class Endboss extends MoveableObject {
         if (callback) callback();
       }
     }, 200);
-  }  
+  }
 
   animateAlert(callback) {
     let counter = 0;
@@ -129,7 +133,7 @@ class Endboss extends MoveableObject {
     }, 500);
     if (!this.isDead) this.animateFlash();
     if (!this.isDead) this.world.shotFireBall();
-  }  
+  }
 
   animateFlash() {
     if (this.isDead) return;
@@ -142,12 +146,12 @@ class Endboss extends MoveableObject {
       }
       fireBall.shot();
     }, 1000 / 60);
-  
+
     setTimeout(() => {
       clearInterval(fireballInterval);
       this.fireballs.splice(this.fireballs.indexOf(fireBall), 1);
     }, 2000);
-  }  
+  }
 
   animateHurt() {
     if (!this.isAnimating) {
@@ -166,11 +170,11 @@ class Endboss extends MoveableObject {
 
   animateDead() {
     if (this.isDead || this.isAnimating) return;
-  
+
     this.clearAllIntervals();
     this.isDead = true;
     this.isAnimating = true;
-  
+
     let counter = 0;
     const deadInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_DEAD);
@@ -181,33 +185,33 @@ class Endboss extends MoveableObject {
         setTimeout(() => this.remove(), 1000);
       }
     }, 500);
-  }  
-  
+  }
+
   clearAllIntervals() {
     if (this.walkingInterval) clearInterval(this.walkingInterval);
     if (this.alertInterval) clearInterval(this.alertInterval);
     if (this.attackInterval) clearInterval(this.attackInterval);
-  }  
+  }
 
   remove() {
     const index = this.world.level.enemies.indexOf(this);
     if (index !== -1) {
       this.world.level.enemies.splice(index, 1);
     }
-  }  
+  }
 
   takeDamage(damage) {
     if (this.isDead) return;
-  
+
     this.energy -= damage;
-  
+
     if (this.energy <= 0) {
       this.die();
     } else if (!this.isAnimating) {
       this.animateHurt();
     }
   }
-  
+
   die() {
     if (this.isDead) return;
     this.animateDead();

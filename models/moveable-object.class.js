@@ -6,26 +6,27 @@ class MoveableObject extends DrawableObject {
   energy = 100;
   lastHit = 0;
   bottles;
-  hurtSound = new Audio('assets/audio/hurt.mp3');
+  hurtSound = new Audio("assets/audio/hurt.mp3");
   audios = [
-    'assets/audio/splat/splat.mp3',
-    'assets/audio/splat/splat1.mp3',
-    'assets/audio/splat/splat2.mp3',
-    'assets/audio/splat/splat3.mp3',
-  ]
+    "assets/audio/splat/splat.mp3",
+    "assets/audio/splat/splat1.mp3",
+    "assets/audio/splat/splat2.mp3",
+    "assets/audio/splat/splat3.mp3",
+  ];
   offset = {
     top: 0,
     bottom: 0,
     left: 0,
-    right: 0
-  }
+    right: 0,
+  };
 
   playRandomAudio() {
-    const randomSoundPath = this.audios[Math.floor(Math.random() * this.audios.length)];
+    const randomSoundPath =
+      this.audios[Math.floor(Math.random() * this.audios.length)];
     const audioPlayer = new Audio(randomSoundPath);
     audioPlayer.volume = 0.5;
     audioPlayer.play();
-}
+  }
 
   applyGravity() {
     setInterval(() => {
@@ -37,8 +38,8 @@ class MoveableObject extends DrawableObject {
   }
 
   isAboveGround() {
-    if(this instanceof ThrowableObject) {
-      return true   
+    if (this instanceof ThrowableObject) {
+      return true;
     } else {
       return this.y < 180;
     }
@@ -52,7 +53,7 @@ class MoveableObject extends DrawableObject {
     if (images.length > 0) {
       let i = this.currentImage % images.length;
       let imgPath = images[i];
-      
+
       if (this.imageCache[imgPath]) {
         this.img = this.imageCache[imgPath];
         this.currentImage++;
@@ -62,33 +63,35 @@ class MoveableObject extends DrawableObject {
     }
   }
 
-  isColliding (mo) {
-    return  this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
-            this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
-            this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
-            this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom;
-}
-  
-hit() {
-  let timePassed = new Date().getTime() - this.lastHit;
-  if (timePassed > 1000 && this.energy > 0) {
-    this.playHurtSound();
-    this.energy -= 15;
-    if (this.energy < 0) {
-      this.energy = 0;
-    }
-    this.lastHit = new Date().getTime();
+  isColliding(mo) {
+    return (
+      this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
+      this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
+      this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
+      this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom
+    );
   }
-}
 
-playHurtSound() {
-  if (this.hurtSound.readyState === 4) {
-    if (this.hurtSound.paused) {
-      this.hurtSound.currentTime = 0;
-      this.hurtSound.play();
+  hit() {
+    let timePassed = new Date().getTime() - this.lastHit;
+    if (timePassed > 1000 && this.energy > 0) {
+      this.playHurtSound();
+      this.energy -= 15;
+      if (this.energy < 0) {
+        this.energy = 0;
+      }
+      this.lastHit = new Date().getTime();
     }
   }
-}
+
+  playHurtSound() {
+    if (this.hurtSound.readyState === 4) {
+      if (this.hurtSound.paused) {
+        this.hurtSound.currentTime = 0;
+        this.hurtSound.play();
+      }
+    }
+  }
 
   isHurt() {
     let timePassed = new Date().getTime() - this.lastHit;
@@ -98,7 +101,7 @@ playHurtSound() {
 
   isDead() {
     return this.energy == 0;
-}
+  }
 
   moveRight() {
     this.x += this.speed;

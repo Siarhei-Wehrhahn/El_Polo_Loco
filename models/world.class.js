@@ -13,9 +13,9 @@ class World {
   canThrowBottle = true;
   bottleCount = 5;
   throwSound = new Audio("assets/audio/throw.mp3");
-  explosionSound = new Audio('assets/audio/explosion.mp3');
-  shotSound = new Audio('assets/audio/shot-fireball.mp3');
-  endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+  explosionSound = new Audio("assets/audio/explosion.mp3");
+  shotSound = new Audio("assets/audio/shot-fireball.mp3");
+  endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
   fireballs = [];
   animationPlayed = false;
   showWinningScreenInstance = new ShowWinningScreen();
@@ -48,78 +48,74 @@ class World {
   playThrowSound() {
     this.playSound(this.throwSound, 0.81, 650);
   }
-  
 
   shotFireBall() {
     let fireBall = new FireBall(this.endboss.x, this.endboss.y);
     this.fireballs.push(fireBall);
     this.playSound(this.shotSound, 0.9);
-  
+
     fireBall.shot();
-    
+
     setTimeout(() => {
-        this.removeFireBall(fireBall);
+      this.removeFireBall(fireBall);
     }, 2000);
   }
-  
 
-
-removeFireBall(fireBall) {
-  const index = this.throwableObject.indexOf(fireBall);
-  if (index > -1) {
+  removeFireBall(fireBall) {
+    const index = this.throwableObject.indexOf(fireBall);
+    if (index > -1) {
       this.throwableObject.splice(index, 1);
-  }
-}
-
-
-run() {
-  setInterval(() => {
-    this.checkBossCollision();
-    this.checkFireballCollision();
-    this.checkCollisions();
-    this.checkThrowObjects();
-    this.checkCoinCollisions();
-    this.checkBottleCollisions();
-    this.checkEnemiesCollision();
-    this.checkForLose();
-  }, 1000 / 60);
-}
-
-clearGameObjects() {
-  this.level.enemies = [];
-  this.level.coins = [];
-  this.level.bottles = [];
-  this.throwableObject = [];
-  this.fireballs = [];
-  this.character = null;
-  this.level = null;
-}
-
-checkForLose() {
-  if(this.character.energy <= 0) {
-    this.character.gameEnd = true;
-    this.level.enemies.forEach(enemy => {
-      this.level.enemies.splice(this.level.enemies.indexOf(enemy), 100);
-  });
-    this.showWinningScreenInstance.showLoseScreen(this.character.x)
-  }
-}
-
-checkFireballCollision() {
-  this.fireballs.forEach((fireball, index) => {
-    if (!fireball.hasHit) {
-      if (this.character.isColliding(fireball) && !this.character.gameEnd) {
-        fireball.hasHit = true;
-
-        this.character.hit();
-        this.playSound(this.explosionSound);
-        this.statusbar.setPercentage(this.character.energy);
-
-        this.fireballs.splice(index, 1);
-      }
     }
-  });
-}
+  }
+
+  run() {
+    setInterval(() => {
+      this.checkBossCollision();
+      this.checkFireballCollision();
+      this.checkCollisions();
+      this.checkThrowObjects();
+      this.checkCoinCollisions();
+      this.checkBottleCollisions();
+      this.checkEnemiesCollision();
+      this.checkForLose();
+    }, 1000 / 60);
+  }
+
+  clearGameObjects() {
+    this.level.enemies = [];
+    this.level.coins = [];
+    this.level.bottles = [];
+    this.throwableObject = [];
+    this.fireballs = [];
+    this.character = null;
+    this.level = null;
+  }
+
+  checkForLose() {
+    if (this.character.energy <= 0) {
+      this.character.gameEnd = true;
+      this.level.enemies.forEach((enemy) => {
+        this.level.enemies.splice(this.level.enemies.indexOf(enemy), 100);
+      });
+      this.showWinningScreenInstance.showLoseScreen(this.character.x);
+    }
+  }
+
+  checkFireballCollision() {
+    this.fireballs.forEach((fireball, index) => {
+      if (!fireball.hasHit) {
+        if (this.character.isColliding(fireball) && !this.character.gameEnd) {
+          fireball.hasHit = true;
+
+          this.character.hit();
+          this.playSound(this.explosionSound);
+          this.statusbar.setPercentage(this.character.energy);
+
+          this.fireballs.splice(index, 1);
+        }
+      }
+    });
+  }
 
   playThrowSound() {
     this.throwSound.currentTime = 0.81;
@@ -132,59 +128,64 @@ checkFireballCollision() {
 
   checkThrowObjects() {
     if (this.keyboard.D && this.canThrowBottle && this.bottleCount > 0) {
-        this.bottleCount--;
-        this.playThrowSound();
+      this.bottleCount--;
+      this.playThrowSound();
 
-        let bottle = new ThrowableObject(
-            this.character.x + (this.character.otherDirection ? -10 : 70),
-            this.character.y + 100,
-            this.character.bottles
-        );
+      let bottle = new ThrowableObject(
+        this.character.x + (this.character.otherDirection ? -10 : 70),
+        this.character.y + 100,
+        this.character.bottles
+      );
 
-        bottle.speedX = this.character.otherDirection ? -8 : 8;
-        this.throwableObject.push(bottle);
+      bottle.speedX = this.character.otherDirection ? -8 : 8;
+      this.throwableObject.push(bottle);
 
-        this.canThrowBottle = false;
-        setTimeout(() => {
-            this.canThrowBottle = true;
-        }, 1000);
+      this.canThrowBottle = false;
+      setTimeout(() => {
+        this.canThrowBottle = true;
+      }, 1000);
     }
-}
+  }
 
-checkBossCollision() {
-  this.throwableObject.forEach((bottle, bottleIndex) => {
-    if (!bottle.hasHit) {
-      this.level.enemies.forEach((enemy) => {
-        if (enemy instanceof Endboss && enemy.isColliding(bottle)) {
-          bottle.triggerSplash();
-          bottle.hasHit = true;
+  checkBossCollision() {
+    this.throwableObject.forEach((bottle, bottleIndex) => {
+      if (!bottle.hasHit) {
+        this.level.enemies.forEach((enemy) => {
+          if (enemy instanceof Endboss && enemy.isColliding(bottle)) {
+            bottle.triggerSplash();
+            bottle.hasHit = true;
 
-          if (enemy.energy > 0) {
-            enemy.energy -= this.smallHit;
-            enemy.animateHurt();
-          } else if (enemy.energy <= 0 && !this.animationPlayed) {
-            this.animationPlayed = true;
-            enemy.animateDead();
-            this.character.gameEnd = true;
-            this.level.enemies.forEach(enemy => {
-              this.level.enemies.splice(this.level.enemies.indexOf(enemy), 100);
-          });
-            this.showWinningScreenInstance.showWinningScreen(this.character.x);
+            if (enemy.energy > 0) {
+              enemy.energy -= this.smallHit;
+              enemy.animateHurt();
+            } else if (enemy.energy <= 0 && !this.animationPlayed) {
+              this.animationPlayed = true;
+              enemy.animateDead();
+              this.character.gameEnd = true;
+              this.level.enemies.forEach((enemy) => {
+                this.level.enemies.splice(
+                  this.level.enemies.indexOf(enemy),
+                  100
+                );
+              });
+              this.showWinningScreenInstance.showWinningScreen(
+                this.character.x
+              );
+            }
+            if (enemy.energy < 0) {
+              enemy.energy = 0;
+            }
+
+            this.bossBar.setPercentage(enemy.energy);
+
+            setTimeout(() => {
+              this.throwableObject.splice(bottleIndex, 1);
+            }, 200);
           }
-          if (enemy.energy < 0) {
-            enemy.energy = 0;
-          } 
-
-          this.bossBar.setPercentage(enemy.energy);
-
-          setTimeout(() => {
-            this.throwableObject.splice(bottleIndex, 1);
-          }, 200);
-        }
-      });
-    }
-  });
-}
+        });
+      }
+    });
+  }
 
   checkCollisions() {
     this.level.enemies.forEach((enemy) => {
@@ -195,7 +196,7 @@ checkBossCollision() {
           if (!enemy.isDead) {
             enemy.energy -= this.fullLife;
             if (enemy.energy <= 0) {
-              enemy.isDead = true
+              enemy.isDead = true;
               this.showDeadChicken(enemy);
             }
           }
@@ -273,19 +274,18 @@ checkBossCollision() {
     this.addToMap(this.coinbar);
     this.addToMap(this.bottlebar);
     if (this.character.x >= 4000) {
-        this.addToMap(this.bossBar);
+      this.addToMap(this.bossBar);
     }
     this.ctx.translate(this.camera_x, 0);
     this.addObjectToMap(this.level.coins);
     this.addObjectToMap(this.level.bottles);
     this.addObjectToMap(this.throwableObject);
     this.addObjectToMap(this.fireballs);
-      this.addToMap(this.showWinningScreenInstance);
+    this.addToMap(this.showWinningScreenInstance);
     this.ctx.translate(-this.camera_x, 0);
 
     requestAnimationFrame(() => this.draw());
-}
-
+  }
 
   addObjectToMap(objects) {
     objects.forEach((o) => {

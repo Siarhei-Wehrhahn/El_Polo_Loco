@@ -1,69 +1,69 @@
 class ShowWinningScreen extends MoveableObject {
-    x;
-    y = 1500;
-    width = 400;
-    height = 200;
-    currentImage = 0;
-    isPlayed = false;
+  x;
+  y = 1500;
+  width = 400;
+  height = 200;
+  currentImage = 0;
+  isPlayed = false;
 
-    IMAGES_WIN = [
-        'assets/img/9_intro_outro_screens/win/won_1.png',
-        'assets/img/9_intro_outro_screens/win/won_2.png',
-    ];
-    IMAGES_LOST = [
-        'assets/img/9_intro_outro_screens/game_over/game over.png',
-        'assets/img/9_intro_outro_screens/game_over/game over.png',
-    ];
-    winSound = new Audio('assets/audio/win.mp3');
-    loseSound = new Audio('assets/audio/lose.mp3');
+  IMAGES_WIN = [
+    "assets/img/9_intro_outro_screens/win/won_1.png",
+    "assets/img/9_intro_outro_screens/win/won_2.png",
+  ];
+  IMAGES_LOST = [
+    "assets/img/9_intro_outro_screens/game_over/game over.png",
+    "assets/img/9_intro_outro_screens/game_over/game over.png",
+  ];
+  winSound = new Audio("assets/audio/win.mp3");
+  loseSound = new Audio("assets/audio/lose.mp3");
 
-    constructor() {
-        super()
-        this.loadImages(this.IMAGES_WIN);
-        this.loadImages(this.IMAGES_LOST);
-    }
+  constructor() {
+    super();
+    this.loadImages(this.IMAGES_WIN);
+    this.loadImages(this.IMAGES_LOST);
+  }
 
-showWinningScreen(x) {
+  showWinningScreen(x) {
     this.y = 137;
     this.x = x + 240;
-    if(!this.isPlayed) {
-        this.isPlayed = true;
-        this.winSound.play();
+    if (!this.isPlayed) {
+      this.isPlayed = true;
+      this.winSound.play();
     }
     this.animationInterval = setInterval(() => {
-        this.playAnimation(this.IMAGES_WIN);
+      this.playAnimation(this.IMAGES_WIN);
     }, 200);
 
     setTimeout(() => {
-        this.loseSound.pause()
+      this.loseSound.pause();
     }, 3000);
 
     setTimeout(() => {
-        clearInterval(this.animationInterval);
-        this.showRestartButton();
+      clearInterval(this.animationInterval);
+      this.showRestartButton();
     }, 5000);
-}
+  }
 
-showLoseScreen(x) {
+  showLoseScreen(x) {
     this.y = 137;
     this.x = x + 220;
-    if(!this.isPlayed) {
-        this.isPlayed = true;
-        this.loseSound.play();
+    if (!this.isPlayed) {
+      this.isPlayed = true;
+      this.loseSound.play();
     }
     this.animationInterval = setInterval(() => {
-        this.playAnimation(this.IMAGES_LOST);
+      this.playAnimation(this.IMAGES_LOST);
     }, 200);
 
     setTimeout(() => {
-        clearInterval(this.animationInterval);
-        this.showRestartButton();
+      clearInterval(this.animationInterval);
+      this.showRestartButton();
     }, 5000);
-}
+  }
 
-showRestartButton() {
+  showRestartButton() {
     if (document.getElementById("restartButton")) {
-        return;
+      return;
     }
 
     const button = document.createElement("button");
@@ -81,20 +81,19 @@ showRestartButton() {
     document.body.appendChild(button);
 
     button.addEventListener("click", () => {
-        document.body.removeChild(button);
-        this.restartGame();
+      document.body.removeChild(button);
+      this.restartGame();
     });
-}
+  }
 
+  restartGame() {
+    location.reload();
+  }
 
-    restartGame() {
-        location.reload();
+  clearIntervals() {
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
     }
-
-    clearIntervals() {
-        if (this.interval) {
-            clearInterval(this.interval);
-            this.interval = null;
-        }
-    }
+  }
 }
