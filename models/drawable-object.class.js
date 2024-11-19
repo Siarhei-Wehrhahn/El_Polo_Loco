@@ -6,6 +6,11 @@ class DrawableObject {
     currentImage;
     height = 170;
     width = 100;
+    audioManager;
+
+    constructor() {
+      this.audioManager = new AudioManager();
+    }
 
     loadImage(path) {
       this.img = new Image();
@@ -17,7 +22,6 @@ class DrawableObject {
           ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
       }
   }
-  
 
   drawFrame(ctx) {
     if (this instanceof Endboss || this instanceof SmallChicken || this instanceof Chicken || this instanceof Character || this instanceof FireBall || this instanceof Coin) {
@@ -44,3 +48,12 @@ class DrawableObject {
     }
 
 }
+
+// TODO: Audomanager aound einstellen
+document.addEventListener('DOMContentLoaded', () => {
+  // Lautstärkeregler Event Listener
+  document.getElementById('volumeSlider').addEventListener('input', (event) => {
+      const selectedVolume = parseFloat(event.target.value) / 100;
+      drawableObject.audioManager.setVolume(selectedVolume);
+  });
+});

@@ -12,9 +12,10 @@ class World {
   throwableObject = [];
   canThrowBottle = true;
   bottleCount = 5;
-  throwSound = new Audio("assets/audio/throw.mp3");
-  explosionSound = new Audio("assets/audio/explosion.mp3");
-  shotSound = new Audio("assets/audio/shot-fireball.mp3");
+  throwSound;
+  explosionSound;
+  shotSound;
+  audioManager;
   endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
   fireballs = [];
   animationPlayed = false;
@@ -22,14 +23,30 @@ class World {
   fullLife = 100;
   smallHit = 10;
 
-  constructor(canvas, keyboard) {
+  constructor(canvas, keyboard, ) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
+    this.throwSound = this.character.audioManager.loadAudio('throw', "assets/audio/throw.mp3");
+    this.explosionSound = this.character.audioManager.loadAudio('explosion', "assets/audio/explosion.mp3");
+    this.shotSound = this.character.audioManager.loadAudio('shot', "assets/audio/shot-fireball.mp3");
+    this.hurtSound = this.character.audioManager.loadAudio('hurt', "assets/audio/hurt.mp3");
     this.setWorld();
     this.endboss.world = this;
     this.draw();
     this.run();
+  }
+
+  playThrowSound() {
+    this.character.audioManager.playAudio('throw', 0.81, 650);
+  }
+
+  playExplosionSound() {
+    this.character.audioManager.playAudio('explosion');
+  }
+
+  playShotSound() {
+    this.character.audioManager.playAudio('shot', 0.9);
   }
 
   playSound(sound, startTime = 0, duration = null) {
@@ -45,14 +62,10 @@ class World {
     }
   }
 
-  playThrowSound() {
-    this.playSound(this.throwSound, 0.81, 650);
-  }
-
   shotFireBall() {
     let fireBall = new FireBall(this.endboss.x, this.endboss.y);
     this.fireballs.push(fireBall);
-    this.playSound(this.shotSound, 0.9);
+    this.playShotSound();
 
     fireBall.shot();
 
@@ -108,22 +121,13 @@ class World {
           fireball.hasHit = true;
 
           this.character.hit();
-          this.playSound(this.explosionSound);
+          this.playExplosionSound();
           this.statusbar.setPercentage(this.character.energy);
 
           this.fireballs.splice(index, 1);
         }
       }
     });
-  }
-
-  playThrowSound() {
-    this.throwSound.currentTime = 0.81;
-    this.throwSound.play();
-    setTimeout(() => {
-      this.throwSound.pause();
-      this.throwSound.currentTime = 0;
-    }, 650);
   }
 
   checkThrowObjects() {

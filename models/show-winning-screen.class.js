@@ -65,26 +65,23 @@ class ShowWinningScreen extends MoveableObject {
     if (document.getElementById("restartButton")) {
       return;
     }
-
-    const button = document.createElement("button");
+  
+    const button = document.createElement("a");
     button.id = "restartButton";
-    button.textContent = "Restart Game";
+    button.className = "codepen-button";
+    button.innerHTML = "<span>Restart Game</span>";
     button.style.position = "absolute";
     button.style.top = "50%";
     button.style.left = "50%";
     button.style.transform = "translate(-50%, -50%)";
-    button.style.padding = "10px 20px";
-    button.style.fontSize = "20px";
-    button.style.backgroundColor = "gold";
-    button.style.border = "none";
-    button.style.cursor = "pointer";
+    button.style.textAlign = "center";
     document.body.appendChild(button);
-
+  
     button.addEventListener("click", () => {
       document.body.removeChild(button);
       this.restartGame();
     });
-  }
+  }  
 
   restartGame() {
     location.reload();

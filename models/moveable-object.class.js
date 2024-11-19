@@ -6,7 +6,7 @@ class MoveableObject extends DrawableObject {
   energy = 100;
   lastHit = 0;
   bottles;
-  hurtSound = new Audio("assets/audio/hurt.mp3");
+  hurtSound;
   audios = [
     "assets/audio/splat/splat.mp3",
     "assets/audio/splat/splat1.mp3",
@@ -20,12 +20,19 @@ class MoveableObject extends DrawableObject {
     right: 0,
   };
 
+  constructor() {
+    super();
+    this.hurtSound = this.audioManager.loadAudio('hurt', "assets/audio/hurt.mp3");
+  }
+
   playRandomAudio() {
-    const randomSoundPath =
-      this.audios[Math.floor(Math.random() * this.audios.length)];
-    const audioPlayer = new Audio(randomSoundPath);
-    audioPlayer.volume = 0.5;
-    audioPlayer.play();
+    const randomSoundPath = this.audios[Math.floor(Math.random() * this.audios.length)];
+    let index = this.audios.findIndex(audio => audio === randomSoundPath);
+    this.audioManager.playAudio(this.audios[index]);
+  }
+
+  playHurtSound() {
+    this.audioManager.playAudio('hurt');
   }
 
   applyGravity() {
@@ -81,15 +88,6 @@ class MoveableObject extends DrawableObject {
         this.energy = 0;
       }
       this.lastHit = new Date().getTime();
-    }
-  }
-
-  playHurtSound() {
-    if (this.hurtSound.readyState === 4) {
-      if (this.hurtSound.paused) {
-        this.hurtSound.currentTime = 0;
-        this.hurtSound.play();
-      }
     }
   }
 
