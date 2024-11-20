@@ -1,0 +1,181 @@
+@font-face {
+  font-family: 'GloriaHallelujah';
+  src: url('../assets/fonts/GloriaHallelujah-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.start-screen {
+  background-color: black;
+  border: 4px solid #e85d04;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(232, 93, 4, 0.6), 0 0 20px rgba(241, 161, 34, 0.6);
+  padding: 5px;
+  width: 1050px;
+  height: 480px;
+}
+
+canvas {
+  background-color: black;
+  border: 4px solid #e85d04;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(232, 93, 4, 0.6), 0 0 20px rgba(241, 161, 34, 0.6);
+  padding: 5px;
+  display: block;
+}
+
+
+.main {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+header {
+  height: 25%;
+}
+
+h1 {
+  font-size: 80px;
+  margin-top: 70px;
+  margin-left: 193px;
+  font-family: 'GloriaHallelujah', sans-serif;
+  color: #e63946;
+  text-shadow: 4px 4px #457b9d, -2px -2px #f4a261;
+  border: 4px solid #f4a261;
+  border-radius: 15px;
+  padding: 20px;
+  background-color: #ffdd55;
+  box-shadow: 8px 8px 0 #457b9d, -4px -4px 0 #f4a261;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  display: inline-block;
+}
+
+
+body {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-image: url(../assets/img/background.webp);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  margin: 0;
+  justify-content: start;
+}
+
+.control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 24px;
+  padding-inline: 30px;
+}
+
+#fullScreenIcon {
+  height: 30px;
+  position: relative;
+  top: -120px;
+  right: -480px;
+  cursor: pointer;
+}
+
+.d_none {
+  display: none !important;
+}
+
+.overlay {
+  position: fixed; /* Statt relative */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  color: white;
+  z-index: 1000; /* Höher als alles andere */
+  text-align: center;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+footer {
+  position: fixed;
+  right: 50%;
+  bottom: 0;
+}
+
+a {
+  text-decoration: none;
+  font-size: 24px;
+  color: transparent;
+  background-image: linear-gradient(to right, #006847, #ffffff, #d61033);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(1px 1px 1px black);
+}
+
+
+@media(max-width: 1050px) {
+  canvas {
+    width: 100%;
+  }
+}
+
+@media(max-height: 480px) {
+  body {
+    background-image: none;
+  }
+
+  header {
+    display: none !important;
+  }
+
+  canvas {
+    height: 100vh;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .main {
+    height: 100%;
+  }
+
+  .start-screen {
+    background-color: black;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+  }
+
+  h1 {
+    display: none !important;
+  }
+
+  .control {
+    display: none !important;
+  }
+
+  #fullScreenIcon {
+    display: none;
+  }
+
+  .slider {
+    display: none !important;
+  }
+  .canvasAndController {
+    width: 100vw;
+    height: 100vh;
+  }
+}

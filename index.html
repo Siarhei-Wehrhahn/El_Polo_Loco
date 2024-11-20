@@ -4,7 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/controller.css">
+    <link rel="stylesheet" href="style/slider.css">
+    <link rel="stylesheet" href="style/loadingScreen.css">
+    <link rel="stylesheet" href="style/startButton.css">
+    <link rel="stylesheet" href="style/restartButton.css">
     <link rel="icon" href="assets/img/favicon_circle.png">
     <script src="./models/audio-manager.class.js"></script>
     <script src="./models/drawable-object.class.js"></script>
@@ -32,6 +37,9 @@
 
 <body>
 
+    <div class="overlay">
+        <p>Bitte Dreh dein Handy!</p>
+    </div>
     <header>
         <h1>El pollo loco</h1>
         <label class="slider">
@@ -42,32 +50,54 @@
                 <g>
                     <path
                         d="M18.36 19.36a1 1 0 0 1-.705-1.71C19.167 16.148 20 14.142 20 12s-.833-4.148-2.345-5.65a1 1 0 1 1 1.41-1.419C20.958 6.812 22 9.322 22 12s-1.042 5.188-2.935 7.069a.997.997 0 0 1-.705.291z"
-                        fill="currentColor" data-original="#000000"></path>
+                        fill="orange" data-original="#000000"></path>
                     <path
                         d="M15.53 16.53a.999.999 0 0 1-.703-1.711C15.572 14.082 16 13.054 16 12s-.428-2.082-1.173-2.819a1 1 0 1 1 1.406-1.422A6 6 0 0 1 18 12a6 6 0 0 1-1.767 4.241.996.996 0 0 1-.703.289zM12 22a1 1 0 0 1-.707-.293L6.586 17H4c-1.103 0-2-.897-2-2V9c0-1.103.897-2 2-2h2.586l4.707-4.707A.998.998 0 0 1 13 3v18a1 1 0 0 1-1 1z"
-                        fill="currentColor" data-original="#000000"></path>
+                        fill="orange" data-original="#000000"></path>
                 </g>
             </svg>
         </label>
     </header>
     <div class="main">
-        <img class="start-screen" src="assets/img/9_intro_outro_screens/start/startscreen_1.png" alt="startScreen">
-        <button class="btn" id="startBtn">
-            <span class="text">Play</span>
-        </button>
-        <div class="loadingScreen d_none">
-            <div class="circ">
-                <div class="load">Loading . . . </div>
-                <div class="hands"></div>
-                <div class="body"></div>
-                <div class="head">
-                    <div class="eye"></div>
+        <div class="canvasAndController">
+            <img class="start-screen" src="assets/img/9_intro_outro_screens/start/startscreen_1.png" alt="startScreen">
+            <button class="btn" id="startBtn">
+                <span class="text">Play</span>
+            </button>
+            <div class="loadingScreen d_none">
+                <div class="circ">
+                    <div class="load">Loading . . . </div>
+                    <div class="hands"></div>
+                    <div class="body"></div>
+                    <div class="head">
+                        <div class="eye"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="canvasAndController">
             <canvas class="d_none" width="1050" height="480" id="canvas"></canvas>
+            <div class="controller-buttons d_none" id="controllerId">
+                <div class="leftButtons buttons">
+                    <div class="rotateLeft triangle button" id="rotateLeft">
+                        <span class="parent">
+                            <span></span>
+                        </span>
+                    </div>
+                    <div class="rotateRight triangle button" id="rotateRight">
+                        <span class="parent">
+                            <span></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="rightButtons buttons">
+                    <div class="cross button" id="cross">
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="square button" id="square">
+                        <span></span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -88,12 +118,29 @@
             <p>= RIGHT</p>
         </div>
     </div>
+    <footer>
+        <a href="impressum/index.html">Impressum</a>
+    </footer>
     <script>
+        function isMobileOrTablet() {
+            return window.matchMedia("(max-width: 1024px)").matches;
+        }
+
+        window.addEventListener('resize', () => {
+            if (isMobileOrTablet() && window.innerHeight > window.innerWidth) {
+                document.querySelector('.overlay').style.display = 'flex';
+            } else {
+                document.querySelector('.overlay').style.display = 'none';
+            }
+        });
+
+
         document.getElementById('startBtn').addEventListener('click', () => {
             let startScreen = document.querySelector('.start-screen');
             let playButton = document.querySelector('.btn');
             let canvas = document.getElementById('canvas');
             let loadingScreen = document.querySelector('.loadingScreen');
+            let controller = document.getElementById('controllerId');
 
             startScreen.classList.add('d_none');
             playButton.classList.add('d_none');
@@ -102,8 +149,9 @@
             setTimeout(() => {
                 loadingScreen.classList.add('d_none');
                 canvas.classList.remove('d_none');
+                controller.classList.remove('d_none');
                 init();
-            }, 5000);
+            }, 7000);
         });
 
 

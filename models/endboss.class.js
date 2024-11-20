@@ -57,6 +57,8 @@ class Endboss extends MoveableObject {
     this.loadImages(this.IMAGES_ATTACK);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
+    this.audioManager.loadAudio('bbq', 'assets/audio/bbq.mp3');
+    this.audioManager.loadAudio('hello', 'assets/audio/endboss.mp3');
     this.x = 6000;
     this.animateBoss();
   }
@@ -106,6 +108,7 @@ class Endboss extends MoveableObject {
 
   animateAlert(callback) {
     let counter = 0;
+    this.audioManager.playAudio('hello');
     const alertInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_ALERT);
       counter++;
@@ -124,6 +127,7 @@ class Endboss extends MoveableObject {
         clearInterval(attackInterval);
         return;
       }
+      this.audioManager.pauseAudio('hello');
       this.playAnimation(this.IMAGES_ATTACK);
       counter++;
       if (counter >= this.IMAGES_ATTACK.length) {
@@ -180,9 +184,11 @@ class Endboss extends MoveableObject {
       this.playAnimation(this.IMAGES_DEAD);
       counter++;
       if (counter >= this.IMAGES_DEAD.length) {
+        this.audioManager.playAudio('bbq')
         clearInterval(deadInterval);
         this.isAnimating = false;
         setTimeout(() => this.remove(), 1000);
+        setTimeout(() => this.audioManager.pauseAudio('bbq'), 5000);
       }
     }, 500);
   }

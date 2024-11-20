@@ -91,38 +91,44 @@ class Character extends MoveableObject {
     this.loadImages(this.IMAGES_STAND);
     this.loadImages(this.IMAGES_LONG_STAND);
     this.audioManager.loadAudio('jump', 'assets/audio/jump.mp3');
-    this.audioManager.loadAudio('walk', 'assets/audio/walk2.mp3');
+    this.audioManager.loadAudio('walking', 'assets/audio/running.mp3');
+    this.audioManager.loadAudio('sleep', 'assets/audio/snoring.mp3')
     this.animate();
     this.applyGravity();
   }
 
   pushNothing() {
-    if (
-        !this.world.keyboard.RIGHT &&
-        !this.world.keyboard.LEFT &&
-        !this.world.keyboard.UP &&
-        !this.world.keyboard.DOWN &&
-        !this.world.keyboard.D &&
-        !this.world.keyboard.SPACE &&
-        !this.gameEnd
-      ) {
-        if (!this.timeWithoutPushButton) {
-          this.timeWithoutPushButton = Date.now();
-        }
-        this.audioManager.pauseAudio('walk');
-      } else {
-        this.timeWithoutPushButton = null;
+    const noKeyPressed = !this.world.keyboard.RIGHT &&
+                         !this.world.keyboard.LEFT &&
+                         !this.world.keyboard.UP &&
+                         !this.world.keyboard.DOWN &&
+                         !this.world.keyboard.D &&
+                         !this.world.keyboard.SPACE &&
+                         !this.gameEnd;
+  
+    if (noKeyPressed) {
+      if (!this.timeWithoutPushButton) {
+        this.timeWithoutPushButton = Date.now();
       }
-  }
+      if (this.audioManager.isPlaying('walking')) {
+        this.audioManager.stopAudio('walking');
+      }
+    } else {
+      this.timeWithoutPushButton = null;
+      if (this.audioManager.isPlaying('sleep')) {
+        this.audioManager.stopAudio('sleep');
+      }
+    }
+  } 
   
   goRight() {
     if (this.world && this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.energy > 0 && !this.gameEnd) {
       this.currentDirection = "RIGHT";
       this.otherDirection = false;
-      this.moveRight();
-      if (!this.isAboveGround()) {
-        this.audioManager.playAudio('walk');
+      if (!this.audioManager.isPlaying('walking')) {
+        this.audioManager.playAudio('walking');
       }
+      this.moveRight();
       this.checkDirection();
     }
   }
@@ -131,10 +137,10 @@ class Character extends MoveableObject {
     if (this.world && this.world.keyboard.LEFT && this.x > 108 && this.energy > 0 && !this.gameEnd) {
       this.currentDirection = "LEFT";
       this.otherDirection = true;
-      this.moveLeft();
-      if (!this.isAboveGround()) {
-        this.audioManager.playAudio('walk');
+      if (!this.audioManager.isPlaying('walking')) {
+        this.audioManager.playAudio('walking');
       }
+      this.moveLeft();
       this.checkDirection();
     }
   }
@@ -147,6 +153,7 @@ class Character extends MoveableObject {
         this.energy > 0 &&
         !this.gameEnd
       ) {
+        this.audioManager.stopAudio('walking');
         this.isJumping = true;
         this.jump();
         this.audioManager.playAudio('jump');
@@ -214,6 +221,7 @@ class Character extends MoveableObject {
   }
   
   handleDeadAnimation() {
+    this.audioManager.stopAudio('walking');
     this.playAnimationOnce(this.IMAGES_DEAD);
     this.animationPlayed = true;
     setTimeout(() => {
@@ -245,6 +253,9 @@ class Character extends MoveableObject {
     if (timeIdle > 4000) {
       this.isStanding = false;
       this.isLongStanding = true;
+      if (!this.audioManager.isPlaying('sleep')) {
+        this.audioManager.playAudio('sleep');
+      }
       this.playAnimation(this.IMAGES_LONG_STAND, 100);
     } else if (timeIdle > 2000 && !this.isStanding && !this.isLongStanding) {
       this.isStanding = true;

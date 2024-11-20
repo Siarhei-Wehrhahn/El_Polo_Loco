@@ -6,6 +6,12 @@ function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
   world.level.createMoreChicken();
+  
+
+  document.getElementById('square').addEventListener('click', () => {
+    world.checkThrowObjects();
+    console.log("D");
+  });
 }
 
 window.addEventListener("keydown", (e) => {
@@ -64,4 +70,39 @@ window.addEventListener("keyup", (e) => {
       keyboard.RIGHT = false;
       keyboard.SPACE = false;
   }
+});
+;
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('rotateLeft').addEventListener('touchstart', () => {
+    keyboard.LEFT = true;
+  });
+
+  document.getElementById('rotateRight').addEventListener('touchstart', () => {
+    keyboard.RIGHT = true;
+  });
+
+  document.getElementById('cross').addEventListener('touchstart', () => {
+    keyboard.UP = true;
+  });
+
+  document.getElementById('rotateLeft').addEventListener('touchend', () => {
+    keyboard.LEFT = false;
+  });
+
+  document.getElementById('rotateRight').addEventListener('touchend', () => {
+    keyboard.RIGHT = false;
+  });
+
+  document.getElementById('cross').addEventListener('touchend', () => {
+    keyboard.UP = false;
+  });
+
+  document.getElementById('square').addEventListener('touchstart', () => {
+    keyboard.D = true;
+  });
+
+  document.getElementById('square').addEventListener('touchend', () => {
+    keyboard.D = false;
+  });
 });

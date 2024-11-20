@@ -46,4 +46,17 @@ class AudioManager {
             audio.volume = value;
         });
     }
+
+  isPlaying(audioKey) {
+    const audio = this.audioCache[audioKey];
+    return audio && !audio.paused && audio.currentTime > 0;
+  }
+  
+  stopAudio(audioKey) {
+    const audio = this.audioCache[audioKey];
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  } 
 }

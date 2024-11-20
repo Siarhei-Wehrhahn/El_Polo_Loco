@@ -1,0 +1,67 @@
+.codepen-button {
+    display: block;
+    cursor: pointer;
+    color: white;
+    position: relative;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 100px;
+    overflow: hidden;
+    padding: 2px;
+    isolation: isolate;
+  }
+  
+  .codepen-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 400%;
+    height: 100%;
+    background: linear-gradient(115deg, #d1d1d1, #02367b, #a7bfde);
+    background-size: 25% 100%;
+    animation: border-animation 0.75s linear infinite;
+    animation-play-state: running;
+    translate: -5% 0%;
+    transition: translate 0.25s ease-out;
+  }
+  
+  .codepen-button:hover::before {
+    animation-play-state: running;
+    transition-duration: 0.75s;
+    translate: 0% 0%;
+  }
+  
+  @keyframes border-animation {
+    to {
+      transform: translateX(-25%);
+    }
+  }
+  
+  .codepen-button span {
+    position: relative;
+    display: block;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    background: #ff7300;
+    border-radius: 100px;
+    height: 100%;
+    text-align: center;
+  }
+
+  .box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    font-size: 30px;
+    color: #e63946;
+    text-shadow: 2px 2px #457b9d, 0px 0px #f4a261;
+    border: 4px solid #f4a261;
+    border-radius: 15px;
+    padding: 24px;
+    background-color: #ffdd55;
+    box-shadow: 8px 8px 0 #457b9d, -4px -4px 0 #f4a261;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
