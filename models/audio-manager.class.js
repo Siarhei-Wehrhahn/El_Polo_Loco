@@ -1,12 +1,25 @@
 class AudioManager {
+    static instance;
+
     constructor() {
+        if (AudioManager.instance) {
+            return AudioManager.instance;
+        }
         this.audioCache = {};
-        this.volume = 0.5;  // Standardlautstärke (50%)
+        this.volume = 0.5; // Standardlautstärke
+        AudioManager.instance = this;
+    }
+
+    static getInstance() {
+        if (!AudioManager.instance) {
+            AudioManager.instance = new AudioManager();
+        }
+        return AudioManager.instance;
     }
 
     loadAudio(key, path) {
         const audio = new Audio(path);
-        audio.volume = this.volume;  // Setzt die Lautstärke
+        audio.volume = this.volume;
         this.audioCache[key] = audio;
         return audio;
     }
@@ -14,25 +27,20 @@ class AudioManager {
     playAudio(key) {
         if (this.audioCache[key]) {
             this.audioCache[key].play();
-        } else if (key) {
-            let audio = new Audio(key);
-            audio.volume = this.volume;  // Setzt die Lautstärke für neu geladenes Audio
-            audio.play();
         } else {
             console.error(`Audio mit Schlüssel "${key}" nicht gefunden.`);
         }
     }
 
-    pauseAudio(name) {
-        const audio = this.audioCache[name];
+    pauseAudio(key) {
+        const audio = this.audioCache[key];
         if (audio) {
             audio.pause();
         }
     }
 
     setVolume(value) {
-        this.volume = value;  // Lautstärkewert aktualisieren
-        // Alle geladenen Audios anpassen
+        this.volume = value;
         Object.values(this.audioCache).forEach(audio => {
             audio.volume = value;
         });

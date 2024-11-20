@@ -9,7 +9,7 @@ class DrawableObject {
     audioManager;
 
     constructor() {
-      this.audioManager = new AudioManager();
+      this.audioManager = AudioManager.getInstance();
     }
 
     loadImage(path) {
@@ -49,11 +49,11 @@ class DrawableObject {
 
 }
 
-// TODO: Audomanager aound einstellen
 document.addEventListener('DOMContentLoaded', () => {
-  // Lautstärkeregler Event Listener
+  const audioManager = AudioManager.getInstance(); // Singleton-Instanz
+
   document.getElementById('volumeSlider').addEventListener('input', (event) => {
       const selectedVolume = parseFloat(event.target.value) / 100;
-      drawableObject.audioManager.setVolume(selectedVolume);
+      audioManager.setVolume(selectedVolume); // Lautstärke ändern
   });
 });
