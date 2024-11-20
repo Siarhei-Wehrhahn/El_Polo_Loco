@@ -38,38 +38,6 @@ class World {
     this.run();
   }
 
-  moveRight() {
-    if (this.currentDirection === "right") {
-      this.directionDuration++;
-      this.speed = Math.min(this.speed + this.speedIncreaseRate, this.maxSpeed);
-    } else {
-      this.currentDirection = "right";
-      this.directionDuration = 0;
-      this.speed = 0.15;
-    }
-    this.x += this.speed;
-  }
-
-  moveLeft() {
-    if (this.currentDirection === "left") {
-      this.directionDuration++;
-      this.speed = Math.min(this.speed + this.speedIncreaseRate, this.maxSpeed);
-    } else {
-      this.currentDirection = "left";
-      this.directionDuration = 0;
-      this.speed = 0.15;
-    }
-    this.x -= this.speed;
-  }
-
-  resetSpeedIfIdle() {
-    if (!keyboard.LEFT && !keyboard.RIGHT) {
-      this.directionDuration = 0;
-      this.speed = 0.15;
-      this.currentDirection = null;
-    }
-  }
-
   playThrowSound() {
     this.character.audioManager.playAudio("throw", 0.81, 650);
   }
@@ -230,7 +198,7 @@ class World {
 
       if (this.character.isColliding(enemy) && !this.character.gameEnd) {
         if (this.character.isAboveGround() && this.character.speedY < 0) {
-          if (!enemy.isDead) {
+          if (!enemy.isDead && !(enemy instanceof Endboss)) {
             enemy.energy -= this.fullLife;
             if (enemy.energy <= 0) {
               enemy.isDead = true;
@@ -255,7 +223,7 @@ class World {
   checkCoinCollisions() {
     this.level.coins.forEach((coin, index) => {
       if (this.character.isColliding(coin)) {
-        this.character.audioManager.playAudio('coinCollect')
+        this.character.audioManager.playAudio('coinCollect');
         this.character.coins += 1;
         this.coinbar.setPercentage(Math.min(this.character.coins * 2, 100));
         this.level.coins.splice(index, 1);

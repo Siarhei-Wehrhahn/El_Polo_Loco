@@ -50,10 +50,10 @@ class DrawableObject {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const audioManager = AudioManager.getInstance(); // Singleton-Instanz
+  const audioManager = AudioManager.getInstance();
 
   document.getElementById('volumeSlider').addEventListener('input', (event) => {
       const selectedVolume = parseFloat(event.target.value) / 100;
-      audioManager.setVolume(selectedVolume); // Lautstärke ändern
+      audioManager.setVolume(selectedVolume);
   });
 });

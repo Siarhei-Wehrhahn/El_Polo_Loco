@@ -114,39 +114,29 @@ class Character extends MoveableObject {
         this.timeWithoutPushButton = null;
       }
   }
-
+  
   goRight() {
-    if (
-        this.world &&
-        this.world.keyboard.RIGHT &&
-        this.x < this.world.level.level_end_x &&
-        this.energy > 0 &&
-        !this.gameEnd
-      ) {
-        this.currentDirection = "RIGHT";
-        this.otherDirection = false;
-        this.moveRight();
-        if (!this.isAboveGround()) {
-          this.audioManager.playAudio('walk');
-        }
+    if (this.world && this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.energy > 0 && !this.gameEnd) {
+      this.currentDirection = "RIGHT";
+      this.otherDirection = false;
+      this.moveRight();
+      if (!this.isAboveGround()) {
+        this.audioManager.playAudio('walk');
       }
+      this.checkDirection();
+    }
   }
-
+  
   goLeft() {
-    if (
-        this.world &&
-        this.world.keyboard.LEFT &&
-        this.x > 108 &&
-        this.energy > 0 &&
-        !this.gameEnd
-      ) {
-        this.currentDirection = "LEFT";
-        this.otherDirection = true;
-        this.moveLeft();
-        if (!this.isAboveGround()) {
-          this.audioManager.playAudio('walk');
-        }
+    if (this.world && this.world.keyboard.LEFT && this.x > 108 && this.energy > 0 && !this.gameEnd) {
+      this.currentDirection = "LEFT";
+      this.otherDirection = true;
+      this.moveLeft();
+      if (!this.isAboveGround()) {
+        this.audioManager.playAudio('walk');
       }
+      this.checkDirection();
+    }
   }
 
   pushUpAndJump() {
@@ -167,15 +157,12 @@ class Character extends MoveableObject {
   }
 
   checkDirection() {
-    if (
-        this.currentDirection === this.lastDirection &&
-        this.currentDirection !== null
-      ) {
-        this.walkDuration += 1000 / 60;
-      } else {
-        this.walkDuration = 0;
-        this.speed = this.baseSpeed;
-      }
+    if (this.currentDirection === this.lastDirection && this.currentDirection !== null) {
+      this.walkDuration += 1000 / 60;
+    } else {
+      this.walkDuration = 0;
+      this.speed = this.baseSpeed;
+    }
   }
 
   animate() {
