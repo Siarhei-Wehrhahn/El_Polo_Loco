@@ -12,41 +12,74 @@ class World {
   throwableObject = [];
   canThrowBottle = true;
   bottleCount = 5;
-  throwSound;
-  explosionSound;
-  shotSound;
-  audioManager;
   endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
   fireballs = [];
   animationPlayed = false;
   showWinningScreenInstance = new ShowWinningScreen();
   fullLife = 100;
   smallHit = 10;
+  currentDirection = null;
+  directionDuration = 0;
+  maxSpeed = 1.0;
+  speedIncreaseRate = 0.02;
 
-  constructor(canvas, keyboard, ) {
+  constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
-    this.throwSound = this.character.audioManager.loadAudio('throw', "assets/audio/throw.mp3");
-    this.explosionSound = this.character.audioManager.loadAudio('explosion', "assets/audio/explosion.mp3");
-    this.shotSound = this.character.audioManager.loadAudio('shot', "assets/audio/shot-fireball.mp3");
-    this.hurtSound = this.character.audioManager.loadAudio('hurt', "assets/audio/hurt.mp3");
+    this.character.audioManager.loadAudio('throw', 'assets/audio/throw.mp3');
+    this.character.audioManager.loadAudio('explosion', 'assets/audio/explosion.mp3');
+    this.character.audioManager.loadAudio('shot', 'assets/audio/shot-fireball.mp3');
+    this.character.audioManager.loadAudio('hurt', 'assets/audio/hurt.mp3');
+    this.character.audioManager.loadAudio('coinCollect', 'assets/audio/collect-coin.mp3');
     this.setWorld();
     this.endboss.world = this;
     this.draw();
     this.run();
   }
 
+  moveRight() {
+    if (this.currentDirection === "right") {
+      this.directionDuration++;
+      this.speed = Math.min(this.speed + this.speedIncreaseRate, this.maxSpeed);
+    } else {
+      this.currentDirection = "right";
+      this.directionDuration = 0;
+      this.speed = 0.15;
+    }
+    this.x += this.speed;
+  }
+
+  moveLeft() {
+    if (this.currentDirection === "left") {
+      this.directionDuration++;
+      this.speed = Math.min(this.speed + this.speedIncreaseRate, this.maxSpeed);
+    } else {
+      this.currentDirection = "left";
+      this.directionDuration = 0;
+      this.speed = 0.15;
+    }
+    this.x -= this.speed;
+  }
+
+  resetSpeedIfIdle() {
+    if (!keyboard.LEFT && !keyboard.RIGHT) {
+      this.directionDuration = 0;
+      this.speed = 0.15;
+      this.currentDirection = null;
+    }
+  }
+
   playThrowSound() {
-    this.character.audioManager.playAudio('throw', 0.81, 650);
+    this.character.audioManager.playAudio("throw", 0.81, 650);
   }
 
   playExplosionSound() {
-    this.character.audioManager.playAudio('explosion');
+    this.character.audioManager.playAudio("explosion");
   }
 
   playShotSound() {
-    this.character.audioManager.playAudio('shot', 0.9);
+    this.character.audioManager.playAudio("shot", 0.9);
   }
 
   playSound(sound, startTime = 0, duration = null) {
@@ -222,9 +255,13 @@ class World {
   checkCoinCollisions() {
     this.level.coins.forEach((coin, index) => {
       if (this.character.isColliding(coin)) {
+        this.character.audioManager.playAudio('coinCollect')
         this.character.coins += 1;
         this.coinbar.setPercentage(Math.min(this.character.coins * 2, 100));
         this.level.coins.splice(index, 1);
+        setTimeout(() => {
+          this.character.audioManager.pauseAudio('coinCollect');
+        }, 500);
       }
     });
   }

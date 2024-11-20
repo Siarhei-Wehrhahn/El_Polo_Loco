@@ -91,7 +91,7 @@ class Character extends MoveableObject {
     this.loadImages(this.IMAGES_STAND);
     this.loadImages(this.IMAGES_LONG_STAND);
     this.audioManager.loadAudio('jump', 'assets/audio/jump.mp3');
-    this.audioManager.loadAudio('walk', 'assets/audio/walk.mp3');
+    this.audioManager.loadAudio('walk', 'assets/audio/walk2.mp3');
     this.animate();
     this.applyGravity();
   }
@@ -279,22 +279,6 @@ class Character extends MoveableObject {
   resetStandStates() {
     this.isStanding = false;
     this.isLongStanding = false;
-  }
-
-  playWalkingSound() {
-    if (this.walkingSound.readyState === 4 && this.walkingSound.paused) {
-      this.walkingSound.currentTime = 0;
-      this.walkingSound.play();
-    }
-  }
-
-  playJumpSound() {
-    if (this.jumpSound.readyState === 4) {
-      if (this.jumpSound.paused) {
-        this.jumpSound.currentTime = 0;
-        this.jumpSound.play();
-      }
-    }
   }
 
   playAnimationOnce(images) {

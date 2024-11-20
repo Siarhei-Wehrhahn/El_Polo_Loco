@@ -30,11 +30,16 @@ canvas {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+}
+header {
+  height: 25%;
 }
 
 h1 {
   font-size: 80px;
   margin-top: 70px;
+  margin-left: 193px;
   font-family: 'GloriaHallelujah', sans-serif;
   color: #e63946;
   text-shadow: 4px 4px #457b9d, -2px -2px #f4a261;
@@ -440,7 +445,7 @@ body {
   /* slider */
   --slider-width: 100%;
   --slider-height: 50px;
-  --slider-bg: rgb(82, 82, 82);
+  --slider-bg: gray;
   --slider-border-radius: 9px;
   /* level */
   --level-color: #fff;
@@ -452,7 +457,6 @@ body {
 }
 
 .slider {
-  position: relative;
   cursor: pointer;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
@@ -464,6 +468,8 @@ body {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  position: relative;
+  margin-left: 50px;
 }
 
 .slider .volume {

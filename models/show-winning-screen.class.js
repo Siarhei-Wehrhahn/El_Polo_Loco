@@ -14,13 +14,15 @@ class ShowWinningScreen extends MoveableObject {
     "assets/img/9_intro_outro_screens/game_over/game over.png",
     "assets/img/9_intro_outro_screens/game_over/game over.png",
   ];
-  winSound = new Audio("assets/audio/win.mp3");
-  loseSound = new Audio("assets/audio/lose.mp3");
+  winSound;
+  loseSound;
 
   constructor() {
     super();
     this.loadImages(this.IMAGES_WIN);
     this.loadImages(this.IMAGES_LOST);
+    this.audioManager.loadAudio('win', 'assets/audio/win.mp3');
+    this.audioManager.loadAudio('lose', 'assets/audio/lose.mp3');
   }
 
   showWinningScreen(x) {
@@ -28,14 +30,14 @@ class ShowWinningScreen extends MoveableObject {
     this.x = x + 240;
     if (!this.isPlayed) {
       this.isPlayed = true;
-      this.winSound.play();
+      this.audioManager.playAudio('win');
     }
     this.animationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_WIN);
     }, 200);
 
     setTimeout(() => {
-      this.loseSound.pause();
+      this.audioManager.pauseAudio('lose');
     }, 3000);
 
     setTimeout(() => {
@@ -49,7 +51,7 @@ class ShowWinningScreen extends MoveableObject {
     this.x = x + 220;
     if (!this.isPlayed) {
       this.isPlayed = true;
-      this.loseSound.play();
+      this.audioManager.playAudio('lose');
     }
     this.animationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_LOST);

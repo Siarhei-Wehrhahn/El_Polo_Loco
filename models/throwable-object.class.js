@@ -15,13 +15,14 @@ class ThrowableObject extends MoveableObject {
   ];
   currentImage = 0;
   hasHit = false;
-  brokenGlass = new Audio('assets/audio/glass-break.mp3')
+  brokenGlass;
 
   constructor(x, y, world) {
       super().loadImage("assets/img/6_salsa_bottle/salsa_bottle.png");
       this.world = world;
       this.loadImages(this.IMAGES_THROW);
       this.loadImages(this.IMAGES_SPLASH);
+      this.audioManager.loadAudio('brokenGlass', 'assets/audio/glass-break.mp3')
       this.x = x;
       this.y = y;
       this.height = 60;
@@ -67,8 +68,7 @@ class ThrowableObject extends MoveableObject {
           }
           clearInterval(this.throwInterval);
           clearInterval(this.gravityInterval);
-          this.brokenGlass.volume = 0.4;
-          this.brokenGlass.play();
+          this.audioManager.playAudio('brokenGlass')
           this.startSplashAnimation();
       }
   }

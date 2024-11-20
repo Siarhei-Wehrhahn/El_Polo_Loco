@@ -27,9 +27,11 @@ class MoveableObject extends DrawableObject {
 
   playRandomAudio() {
     const randomSoundPath = this.audios[Math.floor(Math.random() * this.audios.length)];
-    let index = this.audios.findIndex(audio => audio === randomSoundPath);
-    this.audioManager.playAudio(this.audios[index]);
-  }
+    if (!this.audioManager.audioCache[randomSoundPath]) {
+        this.audioManager.loadAudio(randomSoundPath, randomSoundPath);
+    }
+    this.audioManager.playAudio(randomSoundPath);
+}
 
   playHurtSound() {
     this.audioManager.playAudio('hurt');
