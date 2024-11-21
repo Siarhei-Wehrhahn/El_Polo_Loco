@@ -97,7 +97,7 @@ class Endboss extends MoveableObject {
         return;
       }
       this.playAnimation(this.IMAGES_WALKING);
-      this.x -= 1;
+      this.x -= 5;
       counter++;
       if (counter >= this.IMAGES_WALKING.length) {
         clearInterval(walkingInterval);
