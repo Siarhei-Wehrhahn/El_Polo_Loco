@@ -40,19 +40,39 @@ class Level {
   }
 
   createBackgroundObjectsLevel1() {
-    const backgroundLayers = [
-      "assets/img/5_background/layers/air.png",
-      "assets/img/5_background/layers/3_third_layer/full.png",
-      "assets/img/5_background/layers/2_second_layer/full.png",
-      "assets/img/5_background/layers/1_first_layer/full.png",
-    ];
-
+    const backgroundLayers = {
+      1: [
+        "assets/img/5_background/layers/air.png",
+        "assets/img/5_background/layers/air.png",
+      ],
+      2: [
+        "assets/img/5_background/layers/3_third_layer/1.png",
+        "assets/img/5_background/layers/3_third_layer/2.png",
+      ],
+      3: [
+        "assets/img/5_background/layers/2_second_layer/1.png",
+        "assets/img/5_background/layers/2_second_layer/2.png",
+      ],
+      4: [
+        "assets/img/5_background/layers/1_first_layer/1.png",
+        "assets/img/5_background/layers/1_first_layer/2.png",
+      ],
+    };
+  
     const repetitions = 50;
     const layerWidth = 1440;
+    const overlap = 1;
+  
     for (let i = 0; i < repetitions; i++) {
-      backgroundLayers.forEach((layer) => {
+      Object.keys(backgroundLayers).forEach((layerKey) => {
+        const layerImages = backgroundLayers[layerKey];
+
         this.backgroundObjects.push(
-          new BackgroundObject(layer, i * layerWidth)
+          new BackgroundObject(layerImages[0], i * layerWidth * 2 - overlap)
+        );
+
+        this.backgroundObjects.push(
+          new BackgroundObject(layerImages[1], i * layerWidth * 2 + layerWidth - overlap)
         );
       });
     }

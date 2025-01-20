@@ -129,8 +129,16 @@
         window.addEventListener('resize', () => {
             if (isMobileOrTablet() && window.innerHeight > window.innerWidth) {
                 document.querySelector('.overlay').style.display = 'flex';
+                document.querySelector('header').style.display = 'flex';
+                document.querySelector('.main').style.display = 'flex';
+                document.querySelector('.control').style.display = 'flex';
+                document.querySelector('#fullScreenIcon').style.display = 'flex';
             } else {
                 document.querySelector('.overlay').style.display = 'none';
+                document.querySelector('header').style.display = 'none';
+                document.querySelector('.main').style.display = 'none';
+                document.querySelector('.control').style.display = 'none';
+                document.querySelector('#fullScreenIcon').style.display = 'none';
             }
         });
 

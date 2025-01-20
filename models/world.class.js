@@ -135,6 +135,7 @@ class World {
     if (this.keyboard.D && this.canThrowBottle && this.bottleCount > 0) {
       this.bottleCount--;
       this.playThrowSound();
+      this.bottlebar.setPercentage(Math.min(this.bottleCount * 5, 100));
 
       let bottle = new ThrowableObject(
         this.character.x + (this.character.otherDirection ? -10 : 70),
