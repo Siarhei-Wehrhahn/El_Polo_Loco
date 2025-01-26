@@ -7,7 +7,7 @@ class World {
   camera_x = 0;
   statusbar = new StatusBar(20, 70, "health", 100);
   coinbar = new StatusBar(20, 35, "coins", 0);
-  bottlebar = new StatusBar(20, 0, "bottles", 0);
+  bottlebar = new StatusBar(20, 0, "bottles", 1);
   bossBar = new BossStatusBar(800, 0);
   throwableObject = [];
   canThrowBottle = true;

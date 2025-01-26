@@ -26,8 +26,12 @@ class AudioManager {
 
     playAudio(key) {
         if (this.audioCache[key]) {
-            this.audioCache[key].currentTime = 0;
-            this.audioCache[key].play();
+            try {
+                this.audioCache[key].currentTime = 0;
+                this.audioCache[key].play();
+            } catch(e) {
+                console.error(e);
+            }
         } else {
             console.error(`Audio mit Schlüssel "${key}" nicht gefunden.`);
         }
