@@ -75,34 +75,58 @@ window.addEventListener("keyup", (e) => {
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('rotateLeft').addEventListener('touchstart', () => {
-    keyboard.LEFT = true;
+    event.stopPropagation();
+    setTimeout(() => {
+      keyboard.LEFT = true;
+    }, 50);
   });
 
   document.getElementById('rotateRight').addEventListener('touchstart', () => {
-    keyboard.RIGHT = true;
+    event.stopPropagation();
+    setTimeout(() => {
+      keyboard.RIGHT = true;
+    }, 50);
   });
 
   document.getElementById('cross').addEventListener('touchstart', () => {
-    keyboard.UP = true;
+    event.stopPropagation();
+    setTimeout(() => {
+      keyboard.UP = true;
+    }, 50);
   });
 
   document.getElementById('rotateLeft').addEventListener('touchend', () => {
-    keyboard.LEFT = false;
+    event.stopPropagation();
+    setTimeout(() => {
+      keyboard.LEFT = false;
+    }, 50);
   });
 
   document.getElementById('rotateRight').addEventListener('touchend', () => {
-    keyboard.RIGHT = false;
+    event.stopPropagation();
+    setTimeout(() => {
+      keyboard.RIGHT = false;
+    }, 50);
   });
 
   document.getElementById('cross').addEventListener('touchend', () => {
-    keyboard.UP = false;
+    event.stopPropagation();
+    setTimeout(() => {
+      keyboard.UP = false;
+    }, 50);
   });
 
   document.getElementById('square').addEventListener('touchstart', () => {
-    keyboard.D = true;
+    event.stopPropagation();
+    setTimeout(() => {
+      keyboard.D = true;
+    }, 50);
   });
 
   document.getElementById('square').addEventListener('touchend', () => {
-    keyboard.D = false;
+    event.stopPropagation();
+    setTimeout(() => {
+      keyboard.D = false;
+    }, 50);
   });
 });

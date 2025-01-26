@@ -85,6 +85,10 @@
     margin-top: 9px;
   }
 
+  .rotateLeft, .rotateRight, .cross, .square {
+    touch-action: manipulation;
+  }
+
   .controller-buttons .cross {
     bottom: 5px;
     left: 50%;
@@ -93,7 +97,6 @@
   .controller-buttons .cross span {
     width: 30px;
     height: 4px;
-    /* Halbiert die Höhe */
     background-color: var(--color-cross);
     transform: rotate(45deg);
     margin-top: 18px;
@@ -120,10 +123,15 @@
     rotate: 90deg;
     box-shadow: inset 5px 0 6px 1px #fff, 5px 0 10px 1px #000 !important;
   }
-
+  
   .rotateLeft {
     rotate: -90deg;
-    box-shadow: inset -5px 0 6px 1px #fff, -5px 0px 10px 1px #000 !important;
+    box-shadow: inset -5px 0 6px 1px #fff, -5px 0 10px 1px #000 !important;
+  }
+  
+  .rotateRight:active,
+  .rotateLeft:active {
+    box-shadow: inset -5px 0 6px 5px #000, 0 0 0 0 !important;
   }
 
   .buttons {
@@ -132,6 +140,7 @@
     align-items: center;
     flex-direction: row;
     gap: 18px;
+    z-index: 1000;
   }
 
   .canvasAndController {
